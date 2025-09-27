@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_config}[2025/09/27 v1.0 Config Module]
+\ProvidesPackage{bsk_latex_lib/bsk_config}[2025/09/27 v1.1 Config Module]
 
 \ExplSyntaxOn
 
@@ -13,13 +13,16 @@
 % Define the keys for the setup command
 \keys_define:nn { bsk/config }
 {
-  % The 'sektion' key performs a lookup
   sektion .code:n = {
+    % Get the values from the properties
     \prop_get:cnN { g_bsk_section_#1_prop } { fullname } \g_bsk_config_sektion_tl
     \prop_get:cnN { g_bsk_section_#1_prop } { color }    \g_bsk_config_farg_tl
     \prop_get:cnN { g_bsk_section_#1_prop } { logo }     \g_bsk_config_logga_tl
+
+    \cs_set_eq:NN \meetingSektion \g_bsk_config_sektion_tl
+    \cs_set_eq:NN \meetingFarg \g_bsk_config_farg_tl
+    \cs_set_eq:NN \meetingLogga \g_bsk_config_logga_tl
   },
-  % The other keys are simple setters
   plats .tl_set:N = \g_bsk_config_plats_tl,
   datum .tl_set:N = \g_bsk_config_datum_tl,
 }
@@ -31,10 +34,7 @@
 }
 
 % Create easy-to-use commands for accessing the stored values
-\NewDocumentCommand{\meetingSektion}{}{\tl_use:N \g_bsk_config_sektion_tl}
 \NewDocumentCommand{\meetingPlats}{}{\tl_use:N \g_bsk_config_plats_tl}
 \NewDocumentCommand{\meetingDatum}{}{\tl_use:N \g_bsk_config_datum_tl}
-\NewDocumentCommand{\meetingLogga}{}{\tl_use:N \g_bsk_config_logga_tl}
-\NewDocumentCommand{\meetingFarg}{}{\tl_use:N \g_bsk_config_farg_tl}
 
 \ExplSyntaxOff

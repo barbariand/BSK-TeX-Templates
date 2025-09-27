@@ -1,19 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.3 Meeting Module]
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.5 Meeting Module]
 
 \RequirePackage{xparse}
-
-\ExplSyntaxOn
-
-% --- Keys for agenda items ---
-\keys_define:nn { bsk/agenda }
-{
-  tillägg .code:n = { med~följande~tillägg: \textit{#1} },
-  ändring .code:n = { med~följande~ändring: \textit{#1} },
-}
-
-% --- Variable for justerare's name ---
-\tl_new:N \l_bsk_justerare_name_tl
 
 % --- Individual Formalia Point Commands ---
 
@@ -27,33 +15,29 @@
 
 \NewDocumentCommand{\valAvJusterare}{}
 {
-  % Get the justerare's name from the person property list
-  \tl_set:Nx \l_bsk_justerare_name_tl
-    { \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_just_tl _prop } { name } }
-
-  % Use the name in the paragraf. Use \tl_use:N to print the token list.
+  \ExplSyntaxOn % Turn on expl3 syntax just for this command
   \paragraf{§2}{Val av justerare och rösträknare}
   {
-    Till~att~jämte~ordförande~justera~protokollet~valdes~\tl_use:N \l_bsk_justerare_name_tl.
+    Till~att~jämte~ordförande~justera~protokollet~valdes~\prop_get:Nn \g_bsk_officials_prop { just_name }.
   }
+  \ExplSyntaxOff % Turn it off again
 }
 
 \NewDocumentCommand{\faststallandeAvForedragningslista}{ O{} }
 {
+  \ExplSyntaxOn % Turn on expl3 syntax just for this command
   \paragraf{§3}{Fastställande av föredragningslista}
   {
     \Beslut{att godkänna föredragningslistan \keys_set:nn { bsk/agenda } { #1 }.}
   }
+  \ExplSyntaxOff % Turn it off again
 }
 
 % --- The Main Automated Formalia Command ---
-\NewDocumentCommand{\printFormalia}{}
-{
+\NewDocumentCommand{\printFormalia}{}{
   \present
   \absent
   \moetetsOppnande
   \valAvJusterare
   \faststallandeAvForedragningslista
 }
-
-\ExplSyntaxOff

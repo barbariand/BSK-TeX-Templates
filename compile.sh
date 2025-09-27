@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
-latexmk -outdir=./out/aux/ -out2dir=./out/pdf/
+latexmk -pdf -outdir=./out/aux/ -out2dir=./out/pdf/ main.tex
 mv ./out/aux/main.log ./latex.log

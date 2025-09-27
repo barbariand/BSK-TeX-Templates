@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_layout}[2025/09/27 v1.0 Layout Module]
+\ProvidesPackage{bsk_latex_lib/bsk_layout}[2025/09/27 v1.2 Layout Module]
 
 % Language and font packages
 \RequirePackage[swedish, english]{babel}
@@ -26,11 +26,18 @@
 \lhead{Protokoll fört vid \meetingSektion{}möte i \meetingPlats}
 \rhead{\meetingDatum}
 \rfoot{Justeras: \underline{\qquad\quad}\qquad\thepage \: (\pageref{LastPage})}
+% --- FIX: Use \meetingLogga directly ---
 \cfoot{\includegraphics[width=2.5cm]{\meetingLogga}}
 
 % --- Page Border Setup ---
-\backgroundsetup{color=black,scale=1,opacity=1,angle=0,
-contents={\tikz\draw[line width=3pt,draw=\meetingFarg]
-  ( $ (current page.south east) +(-13,2) $ ) -- ( $ (current page.south west) +(1.75 ,2) $ )
-  ( $ (current page.south west) +(2,1) $ ) -- ( $ (current page.north west) +(2,-1.75) $ )
-  ( $ (current page.north west) +(1.75,-2) $ ) -- ( $ (current page.north east) -(2,2) $ ); }}
+% --- FIX: Define a command that uses the fully expanded color ---
+\newcommand{\SetPageBorder}{
+  \backgroundsetup{color=black,scale=1,opacity=1,angle=0,
+  contents={\tikz\draw[line width=3pt,draw=\meetingFarg]
+    ( $ (current page.south east) +(-13,2) $ ) -- ( $ (current page.south west) +(1.75 ,2) $ )
+    ( $ (current page.south west) +(2,1) $ ) -- ( $ (current page.north west) +(2,-1.75) $ )
+    ( $ (current page.north west) +(1.75,-2) $ ) -- ( $ (current page.north east) -(2,2) $ ); }}
+}
+
+% Apply the border at the beginning of the document
+\AtBeginDocument{\SetPageBorder}
