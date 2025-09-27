@@ -2,12 +2,13 @@
 \ProvidesPackage{bsk_latex_lib/bsk_structure}[2025/09/27 v1.0 Structure Module]
 
 \RequirePackage{float} % For the [H] option to place tables exactly here
-
-\newcommand{\paragraf}[3]{
+\RequirePackage{array}
+\newcounter{paragrafcounter}
+\newcommand{\paragraf}[2]{
   \begin{table}[H]
   {\renewcommand\arraystretch{1.25}
   \begin{tabular}{ p{0.5cm} p{4cm} p{10cm}}
-  #1 & \raggedright{#2} & \raggedright{#3}
+  \stepcounter{paragrafcounter} & \raggedright{#1} & \raggedright{#2}
   \end{tabular}}
   \end{table}
 }

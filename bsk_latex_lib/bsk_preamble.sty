@@ -1,0 +1,20 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/bsk_preamble}[2025/09/27 v1.0 Preamble and custom commands]
+
+\RequirePackage{geometry}
+\RequirePackage{times}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[swedish,english]{babel}
+\RequirePackage{float}
+\RequirePackage{lastpage}
+\RequirePackage{fancyhdr}
+\RequirePackage{array}
+\RequirePackage{graphicx}
+\RequirePackage{background}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+
+\newcommand{\enter}{\noalign{\vskip 3mm}}
+\newcommand{\beslut}[1]{\textbf{Styrelsen beslutade}\\\textit{att(1)} #1}
+\newcommand{\beslutTwo}[2]{\textbf{Styrelsen beslutade}\\\textit{att(1)} #1\\ \textit{att(2)} #2}
+\newcommand{\beslutThree}[3]{\textbf{Styrelsen beslutade}\\\textit{att(1)} #1\\ \textit{att(2)} #2\\ \textit{att(3)} #3}

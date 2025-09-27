@@ -1,42 +1,39 @@
+% bsk_latex_lib/bsk_meeting.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.6 Meeting Module (Robust)]
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.8 Meeting Module (Closing Command)]
 
 \RequirePackage{xparse}
+\ExplSyntaxOn
 
-% --- Individual Formalia Point Commands ---
-
-\NewDocumentCommand{\moetetsOppnande}{}
-{
-  \paragraf{§1}{Opening of the meeting}
-  {
-    The meeting chairperson declared the meeting open.
-  }
-}
-
-% --- CORRECTED COMMAND ---
-\NewDocumentCommand{\valAvJusterare}{}
-{
-  % FIX: This now uses the globally safe \getOfficial command.
-  % No special syntax or environments are needed here, making it robust.
-  \paragraf{§2}{Election of adjuster and vote counters}
-  {
-    To adjust the protocol alongside the chairperson, \getOfficial{just_name} was elected.
-  }
-}
-
-\NewDocumentCommand{\faststallandeAvForedragningslista}{ O{} }
-{
-  \paragraf{§3}{Approval of the agenda}
-  {
-    The agenda was approved according to the distributed proposal.
-  }
-}
+% --- Internal Formalia Point Commands ---
+\NewDocumentCommand{\moetetsOppnande}{}{\paragraf{§1}{Mötet~öppnas}{Mötesordförande~\getOfficial{ordf_name}~förklarade~mötet~öppnat.}}
+\NewDocumentCommand{\valAvJusterare}{}{\paragraf{§2}{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{\Beslut*{att~välja~\getOfficial{ordf_name}~till~mötesordförande.}{att~välja~\getOfficial{sekr_name}~till~mötessekreterare.}{att~välja~\getOfficial{just_name}~till~justeringsperson.}}}
+\NewDocumentCommand{\moetetsBehorigaUtlysande}{}{\paragraf{§3}{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}{\Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}}}
+\NewDocumentCommand{\yttrandeOchRostratt}{}{\paragraf{§4}{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}}
+\NewDocumentCommand{\faststallandeAvForedragningslista}{O{}}{\paragraf{§5}{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}}
+\NewDocumentCommand{\faststallandeAvForegaendeProtokoll}{O{}}{\paragrag{§6}{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}}
 
 % --- The Main Automated Formalia Command ---
-\NewDocumentCommand{\printFormalia}{}{
+\NewDocumentCommand{\printFormalia}{}
+{
   \present
   \absent
+  \subsection*{Formalia}
   \moetetsOppnande
   \valAvJusterare
+  \moetetsBehorigaUtlysande
+  \yttrandeOchRostratt
   \faststallandeAvForedragningslista
+  \faststallandeAvForegaendeProtokoll
+  \section*{Ärenden}
 }
+
+% --- New command to print closing matter ---
+\NewDocumentCommand{\printClosing}{}
+ {
+  \section*{Avslutning}
+  \printDecisionSummary
+  \signatures
+ }
+
+\ExplSyntaxOff
