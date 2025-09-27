@@ -5,10 +5,11 @@
 \RequirePackage{array}
 \newcounter{paragrafcounter}
 \newcommand{\paragraf}[2]{
+  \stepcounter{paragrafcounter}
   \begin{table}[H]
   {\renewcommand\arraystretch{1.25}
   \begin{tabular}{ p{0.5cm} p{4cm} p{10cm}}
-  \stepcounter{paragrafcounter} & \raggedright{#1} & \raggedright{#2}
+  §\theparagrafcounter & \raggedright{#1} & \raggedright{#2}
   \end{tabular}}
   \end{table}
 }

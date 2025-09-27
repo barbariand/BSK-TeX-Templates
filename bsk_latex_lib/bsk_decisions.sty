@@ -34,7 +34,7 @@
   \begin{itemize}
     \clist_map_inline:nn {#2}
      {
-      \item \textit{att}~##1
+      \item \textit{att}~(##1)
       % If the command is NOT starred, save the decision to the list.
       \IfBooleanF {#1}
        {
@@ -66,7 +66,7 @@
   \seq_if_empty:NF \g_bsk_decisions_seq
    {
     \stepcounter{paragrafcounter} % Increment for the summary paragraph
-    \paragraf{§\arabic{paragrafcounter}}{Beslutssammanfattning}
+    \paragraf{Beslutssammanfattning}
      {
       Följande~beslut~har~fattats~under~mötet:
       \begin{itemize}
