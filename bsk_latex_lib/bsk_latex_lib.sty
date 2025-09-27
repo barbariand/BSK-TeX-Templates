@@ -1,11 +1,13 @@
 %%%% This is mostly importing important packages and set default settings.The comments are to explain what it is used for %%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib}[2025/09/27 v1.0 BSK Protocol Package]
 
 % Language support
 \RequirePackage[swedish, english]{babel}
 % To switch to swedish
-\newcommand{\swe}[\selectlanguage{swedish}]
+\newcommand{\swe}{\selectlanguage{swedish}}
 % To switch to english
-\newcommand{\eng}[\selectlanguage{english}]
+\newcommand{\eng}{\selectlanguage{english}}
 % borders and such
 \RequirePackage{geometry}
 \geometry{a4paper, portrait, lmargin=3cm, rmargin=3cm, tmargin=4cm}

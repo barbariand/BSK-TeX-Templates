@@ -1,0 +1,48 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.1 Meeting Module]
+
+\RequirePackage{xparse}
+
+\ExplSyntaxOn
+% Define keys for the optional argument of \faststallandeAvForedragningslista
+\keys_define:nn { bsk/agenda }
+{
+  tillägg .code:n = { med~följande~tillägg: \textit{#1} },
+  ändring .code:n = { med~följande~ändring: \textit{#1} },
+}
+\ExplSyntaxOff
+
+% --- Individual Formalia Point Commands ---
+
+\NewDocumentCommand{\moetetsOppnande}{}{
+  \paragraf{§1}{Mötets öppnande}{
+    Mötesordförande förklarade mötet öppnat.
+  }
+}
+
+\NewDocumentCommand{\valAvJusterare}{}{
+  \paragraf{§2}{Val av justerare och rösträknare}{
+    % --- FIX: Wrap the expl3 code in an ExplSyntax sandwich ---
+    \ExplSyntaxOn
+    Till~att~jämte~ordförande~justera~protokollet~valdes~\prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_just_tl _prop } { name }.
+    \ExplSyntaxOff
+  }
+}
+
+\NewDocumentCommand{\faststallandeAvForedragningslista}{ O{} }{
+  \paragraf{§3}{Fastställande av föredragningslista}{
+    % This command already correctly used the sandwich
+    \ExplSyntaxOn
+    \Beslut{att godkänna föredragningslistan \keys_set:nn { bsk/agenda } { #1 }.}
+    \ExplSyntaxOff
+  }
+}
+
+% --- The Main Automated Formalia Command ---
+\NewDocumentCommand{\printFormalia}{}{
+  \present
+  \absent
+  \moetetsOppnande
+  \valAvJusterare
+  \faststallandeAvForedragningslista
+}
