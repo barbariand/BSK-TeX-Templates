@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.5 Meeting Module]
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.6 Meeting Module (Robust)]
 
 \RequirePackage{xparse}
 
@@ -7,30 +7,29 @@
 
 \NewDocumentCommand{\moetetsOppnande}{}
 {
-  \paragraf{§1}{Mötets öppnande}
+  \paragraf{§1}{Opening of the meeting}
   {
-    Mötesordförande förklarade mötet öppnat.
+    The meeting chairperson declared the meeting open.
   }
 }
 
+% --- CORRECTED COMMAND ---
 \NewDocumentCommand{\valAvJusterare}{}
 {
-  \ExplSyntaxOn % Turn on expl3 syntax just for this command
-  \paragraf{§2}{Val av justerare och rösträknare}
+  % FIX: This now uses the globally safe \getOfficial command.
+  % No special syntax or environments are needed here, making it robust.
+  \paragraf{§2}{Election of adjuster and vote counters}
   {
-    Till~att~jämte~ordförande~justera~protokollet~valdes~\prop_get:Nn \g_bsk_officials_prop { just_name }.
+    To adjust the protocol alongside the chairperson, \getOfficial{just_name} was elected.
   }
-  \ExplSyntaxOff % Turn it off again
 }
 
 \NewDocumentCommand{\faststallandeAvForedragningslista}{ O{} }
 {
-  \ExplSyntaxOn % Turn on expl3 syntax just for this command
-  \paragraf{§3}{Fastställande av föredragningslista}
+  \paragraf{§3}{Approval of the agenda}
   {
-    \Beslut{att godkänna föredragningslistan \keys_set:nn { bsk/agenda } { #1 }.}
+    The agenda was approved according to the distributed proposal.
   }
-  \ExplSyntaxOff % Turn it off again
 }
 
 % --- The Main Automated Formalia Command ---

@@ -1,3 +1,4 @@
+% bsk_latex_lib/bsk_layout.sty
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{bsk_latex_lib/bsk_layout}[2025/09/27 v1.2 Layout Module]
 
@@ -23,14 +24,12 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\lhead{Protokoll fört vid \meetingSektion{}möte i \meetingPlats}
+\lhead{Protocol from the \meetingSektion{} meeting in \meetingPlats}
 \rhead{\meetingDatum}
-\rfoot{Justeras: \underline{\qquad\quad}\qquad\thepage \: (\pageref{LastPage})}
-% --- FIX: Use \meetingLogga directly ---
+\rfoot{Adjusted: \underline{\qquad\quad}\qquad\thepage \: (\pageref{LastPage})}
 \cfoot{\includegraphics[width=2.5cm]{\meetingLogga}}
 
 % --- Page Border Setup ---
-% --- FIX: Define a command that uses the fully expanded color ---
 \newcommand{\SetPageBorder}{
   \backgroundsetup{color=black,scale=1,opacity=1,angle=0,
   contents={\tikz\draw[line width=3pt,draw=\meetingFarg]
