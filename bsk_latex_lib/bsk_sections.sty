@@ -1,7 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_sections}[2025/09/27 v1.0 Sections Module]
+\ProvidesPackage{bsk_latex_lib/bsk_sections}[2025/09/27 v1.1 Sections Module]
 
 \ExplSyntaxOn
+
+\tl_new:N \l_bsk_section_fullname_tl
+\tl_new:N \l_bsk_section_color_tl
+\tl_new:N \l_bsk_section_logo_tl
 
 % Command to define a new section and its properties
 % #1 = internal name (e.g., styrelsen)
@@ -10,9 +14,9 @@
 {
   \prop_new:c { g_bsk_section_#1_prop }
   \keys_set:nn { bsk/section } { #2 }
-  \prop_gput_cnV { g_bsk_section_#1_prop } { fullname } \l_bsk_section_fullname_tl
-  \prop_gput_cnV { g_bsk_section_#1_prop } { color } \l_bsk_section_color_tl
-  \prop_gput_cnV { g_bsk_section_#1_prop } { logo } \l_bsk_section_logo_tl
+  \prop_gput:cnV { g_bsk_section_#1_prop } { fullname } \l_bsk_section_fullname_tl
+  \prop_gput:cnV { g_bsk_section_#1_prop } { color }    \l_bsk_section_color_tl
+  \prop_gput:cnV { g_bsk_section_#1_prop } { logo }     \l_bsk_section_logo_tl
 }
 
 % Define the keys used in \newSection
@@ -24,7 +28,8 @@
 }
 
 \ExplSyntaxOff
-% --- Define Your Sections Here ---
+
+% --- Your Data Definitions (This part was already correct) ---
 \newSection{root}{
   fullname = {\rot},
   color    = {ROOTG},
@@ -94,11 +99,6 @@
   fullname = {\sexz},
   color    = {SEXZ},
   logo     = {loggor/logo_SEXISTENZ_green.png}
-}
-\newSection{sit}{
-  fullname = {\sit},
-  color    = {SITO},
-  logo     = {loggor/logo_SIT.png}
 }
 \newSection{sit}{
   fullname = {\sit},

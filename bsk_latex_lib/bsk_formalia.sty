@@ -1,9 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v4.1 Formalia Module]
+\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v4.2 Formalia Module]
 
 \ExplSyntaxOn
 
-% --- Variable and List Declarations ---
+% --- Variable Declarations ---
 \tl_new:N \g_bsk_present_list_tl
 \tl_new:N \g_bsk_absent_list_tl
 \tl_new:N \l_bsk_attendance_name_tl
@@ -12,13 +12,18 @@
 \tl_new:N \g_bsk_ordf_tl
 \tl_new:N \g_bsk_sekr_tl
 \tl_new:N \g_bsk_just_tl
+\tl_new:N \l_bsk_ordf_name_tl
+\tl_new:N \l_bsk_sekr_name_tl
+\tl_new:N \l_bsk_just_name_tl
 
-% --- Person Definition System (Key-Value) ---
+% --- Person Definition System ---
 \keys_define:nn { bsk/person }
 {
   name .tl_set:N  = \l_bsk_person_name_tl,
   role .tl_set:N  = \l_bsk_person_role_tl,
 }
+
+% --- FIX: Removed the stray "You wanna" text ---
 \NewDocumentCommand{\newperson}{ m m }
 {
   \prop_new:c { g_bsk_person_ \cs_to_str:N #1 _prop }
@@ -60,7 +65,7 @@
   }
 }
 
-% --- Meeting Official and Formalia Commands ---
+% --- Meeting Official Commands ---
 \NewDocumentCommand{\setMeetingOfficials}{ m m m }
 {
   \tl_gset:Nn \g_bsk_ordf_tl {#1}
@@ -90,18 +95,23 @@
 % --- Dynamic Signature Command ---
 \NewDocumentCommand{\signatures}{ }
 {
+  % Get all the names before starting the table for robustness
+  \tl_set:Nx \l_bsk_ordf_name_tl { \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_ordf_tl _prop } { name } }
+  \tl_set:Nx \l_bsk_sekr_name_tl { \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_sekr_tl _prop } { name } }
+  \tl_set:Nx \l_bsk_just_name_tl { \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_just_tl _prop } { name } }
+
   \begin{table}[H]
   \noindent\begin{tabular}{ll}
   \makebox[2.5in]{} & \makebox[2.5in]{}\\[8ex]
   \makebox[2.5in]{\hrulefill} & \makebox[2.5in]{\hrulefill}\\
   Mötesordförande & Datum\\
-  \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_ordf_tl _prop } { name } \\[8ex]
+  \l_bsk_ordf_name_tl \\[8ex]
   \makebox[2.5in]{\hrulefill} & \makebox[2.5in]{\hrulefill}\\
   Mötessekreterare & Datum\\
-  \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_sekr_tl _prop } { name } \\[8ex]
+  \l_bsk_sekr_name_tl \\[8ex]
   \makebox[2.5in]{\hrulefill} & \makebox[2.5in]{\hrulefill}\\
   Justerare & Datum\\
-  \prop_get:cn { g_bsk_person_ \cs_to_str:V \g_bsk_just_tl _prop } { name } \\
+  \l_bsk_just_name_tl \\
   \end{tabular}
   \end{table}
 }
