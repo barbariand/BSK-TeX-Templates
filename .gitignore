@@ -1,0 +1,5 @@
+out/
+main.tex
+.direnv/
+test.txt
+.envrc

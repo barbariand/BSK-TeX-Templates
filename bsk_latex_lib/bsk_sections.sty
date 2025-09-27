@@ -1,0 +1,43 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/bsk_sections}[2025/09/27 v1.0 Sections Module]
+
+\ExplSyntaxOn
+
+% Command to define a new section and its properties
+% #1 = internal name (e.g., styrelsen)
+% #2 = key-value properties
+\NewDocumentCommand{\newSection}{ m m }
+{
+  \prop_new:c { g_bsk_section_#1_prop }
+  \keys_set:nn { bsk/section } { #2 }
+  \prop_gput_cnV { g_bsk_section_#1_prop } { fullname } \l_bsk_section_fullname_tl
+  \prop_gput_cnV { g_bsk_section_#1_prop } { color } \l_bsk_section_color_tl
+  \prop_gput_cnV { g_bsk_section_#1_prop } { logo } \l_bsk_section_logo_tl
+}
+
+% Define the keys used in \newSection
+\keys_define:nn { bsk/section }
+{
+  fullname .tl_set:N  = \l_bsk_section_fullname_tl,
+  color    .tl_set:N  = \l_bsk_section_color_tl,
+  logo     .tl_set:N  = \l_bsk_section_logo_tl,
+}
+
+\ExplSyntaxOff
+
+% --- Define Your Sections Here ---
+\newSection{styrelsen}{
+  fullname = {\styrelsen},
+  color    = {BSK},
+  logo     = {loggor/bsk-logo.png}
+}
+\newSection{bits}{
+  fullname = {\bits},
+  color    = {BITS},
+  logo     = {loggor/bits-logo.png}
+}
+\newSection{eken}{
+  fullname = {\eken},
+  color    = {EKEN},
+  logo     = {loggor/eken-logo.png}
+}

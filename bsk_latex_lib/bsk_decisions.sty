@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/bsk_decisions}[2025/09/27 v2.0 Decisions Module]
+
+\ExplSyntaxOn
+
+% --- Decision Summary List ---
+\tl_new:N \g_bsk_decisions_list_tl
+\NewDocumentCommand{\addDecision}{ m }
+{
+  \tl_gput_right:Nn \g_bsk_decisions_list_tl { \item #1 }
+}
+\NewDocumentCommand{\clearDecisions}{ }
+{
+  \tl_gclear:N \g_bsk_decisions_list_tl
+}
+\NewDocumentCommand{\printBeslut}{ }
+{
+  \tl_if_empty:NF \g_bsk_decisions_list_tl
+  {
+    \paragraf{}{
+      \textbf{Sammanfattning av beslut:}}{
+        \begin{enumerate}
+          \tl_use:N \g_bsk_decisions_list_tl
+        \end{enumerate}
+      }
+  }
+}
+
+% --- In-line Decision Formatting Command ---
+\seq_new:N \l_bsk_decision_points_seq
+\NewDocumentCommand{\Beslut}{ m }
+{
+  \textbf{Styrelsen beslutade} \\
+  \seq_set_from_clist:Nn \l_bsk_decision_points_seq {#1}
+  \seq_map_indexed_inline:Nn \l_bsk_decision_points_seq
+  {
+    \textit{att(##1)}~##2 \\
+    \addDecision{##2}
+  }
+}
+
+\ExplSyntaxOff

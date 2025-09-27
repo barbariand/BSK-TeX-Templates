@@ -1,0 +1,233 @@
+\documentclass{article}
+
+%%%%%%%% Kom ihåg att ändra mötesordförande, mötessekreterare samt justeringsperson.%%%%%%%%%
+\newcommand{\ordf}{\Gustav}
+\newcommand{\vordf}{\Cindy}
+\newcommand{\sekr}{\Albert}
+\newcommand{\just}{\Jesper}
+
+
+\usepackage{background}
+\usetikzlibrary{calc}
+
+\newcommand{\lcolor}{ROOTGR}
+\newcommand{\logga}{root_logga.png}
+
+%%%%%% Här väljer ni vilket kommando ni vill ha för varje person i styrelsen samt skriver deras fulla namn.%%%%%%%%%%
+\newcommand{\rootday}{\#ROOT-Day}
+\newcommand{\ledamotfyra}{Förnamn Efternamn4}
+\newcommand{\ledamotfem}{Förnamn Efternamn5}
+\newcommand{\ledamotsex}{Förnamn Efternamn6}
+\newcommand{\ledamotsju}{Förnamn Efternamn7}
+\newcommand{\ledamotatta}{Förnamn Efternamn8}
+\newcommand{\ledamotnio}{Förnamn Efternamn9}
+\newcommand{\ledamottio}{Förnamn Efternamn10}
+
+%%%%%% Här väljer ni vilket kommando ni vill ha för varje person som inte är med i styrelsen men som ofta är deltagande, exempelvis ekonomichef etc, samt skriver deras fulla namn. Ni lägger till flera namn genom att göra ett nytt ”newcommand” för varje individ. %%%%%%%%%%
+\newcommand{\Melker}{Melker Månsson}
+\newcommand{\Jesper}{Jesper Lennehag}
+\newcommand{\Janine}{Janine de Vries}
+\newcommand{\Cindy}{Cindy Nilsson}
+\newcommand{\Albert}{Albert Rogö}
+\newcommand{\Ludvig}{Ludvig Källqvist Nygren}
+\newcommand{\Lukas}{Lukas Andersson}
+\newcommand{\Gustaf}{Gustaf Linderholt}
+\newcommand{\Gustav}{Gustav Norberg}
+
+\newcommand{\sektion}{\#ROOT-} %%%% Ändra till rätt organ %%%%
+\newcommand{\motesdatum}{yyyy-mm-dd} %%%%% Ändra till rätt datum.%%%%%
+\newcommand{\motesplats}{Karlskrona/Microsoft Teams}%%%%% Ändra till rätt mötesplats.%%%%%
+
+\newcommand{\present}{
+    \paragraf{}{
+        \textbf{Närvarande:}}{
+                               \begin{tabular}{ll}
+                               \Gustav & Ordförande \\
+                               \Cindy & Vice-ordförande\\
+                               \Albert & Sekreterare \\
+                               \Gustaf & Ekonomiansvarig\\
+                               \Jesper & Ledamot\\
+                               \Lukas & Ledamot\\
+                               \Ludvig & Ledamot\\
+                               \end{tabular}}
+}
+\newcommand{\absent}{
+    \paragraf{}{
+        \textbf{Frånvarande:}}{
+                                \begin{tabular}{ll}
+                                \Melker & Suppleant\\
+                                \Janine & Suppleant\\
+                                \end{tabular}}
+}
+
+%%%%%% Varje paragraf skrivs genom kommandot \paragraf{§#}{vad punkten heter}{vad som ska protokollföras.}
+
+\begin{document}
+\present
+\absent
+\subsection*{Formalia}
+\paragraf{§1}{Mötet öppnas}{Mötet öppnades av \ordf{} kl. hh:mm.}
+
+\paragraf{§2}{Val av mötesordförande, mötessekreterare samt justeringsperson.}
+{\beslutThree
+ {välja \ordf{} till mötesordförande.}
+ {välja \sekr{} till mötessekreterare.}
+ {välja \just{} till justeringsperson.}}
+
+\paragraf{§3}{Fråga om mötets behöriga utlysande och beslutsmässighet}
+{\beslutTwo
+ {anse mötet behörigt utlyst.}
+ {anse mötet vara beslutsmässigt med minst hälften av ordinarie ledamöter närvarande.}
+}
+
+\paragraf{§4}{Yttranderätt och rösträtt}
+{\beslut
+ {Samtliga närvarande medlemmar i Blekinge studentkår hade närvaro- samt yttranderätt. Ordinarie styrelse hade rösträtt vid beslut. }}
+
+\paragraf{§5}{Fastställande av dagordning}{Dagordningen fastställdes enligt utsänt förslag.\enter
+                                           %%%%% Behöver något läggas till på dagordningen används följande formulering.%%%%%
+                                           %\yrkar{\Janine}{lägga till Feedback-soffan och justera efterföljande numrering.}{\bifall}
+                                          }
+
+\paragraf{§6}{Fastställande av föregående mötesprotokoll} {
+    %\yrkar{\ordf}{fastställa föregående mötesprotokoll.}{\bifall}
+    %%%% ELLER %%%%
+    %Protokoll från styrelsemöte yyyy-mm-dd är ej justerat. \\
+    %%%% ELLER %%%%
+    %Protokoll från styrelsemöte yyyy-mm-dd är ej signerat.
+    Finns inga tidigare protokoll.
+}
+
+\paragraf{§7}{Skrivelser}{
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+    Mail från xx angående yy \\
+}
+\section*{Ärenden}
+
+\paragraf{§8}{Rapporter} {
+    \Melker{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Janine{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Gustav{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Jesper{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Albert{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Cindy{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Lukas{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+
+    \Ludvig{} har:
+    \begin{itemize}
+    \item Inget att rapportera.
+    \end{itemize}
+}
+
+\paragraf{§8.1}{Tidigare action-points} {
+
+}
+
+
+\paragraf{§9}{Studiebevakning}{
+    \textbf{Möte som vi kanske varit på}\\
+    Brödtext
+    \enter
+
+    \textbf{Annat möte eller punkt}\\
+    Brödtext
+    \enter
+}
+\paragraf{§9.1}{Feedback-soffan}{
+    Inget att rapportera.
+}
+
+\paragraf{§10}{Studiesocialt}{
+    \textbf{Event}\\
+    Brödtext
+    \enter
+
+    \textbf{Annat event}\\
+    Brödtext
+}
+\paragraf{§11}{Styrelsen}{
+
+}
+
+\paragraf{§12}{Vibe check}{
+
+}
+
+
+\section*{Avslutning}
+\paragraf{§13}{Övrigt}{
+    %\textbf{§14.1} \\ Detta är övrigtpunkt 1. \enter
+    %\textbf{§14.2} \\ Detta är övrigtpunkt 2. \enter
+}
+\paragraf{§14}{Kalender}{
+    % Lägg i kronologiskordning
+    \begin{tabular}{ll}
+    Nästa styrelse möte & yyyy-mm-dd\\
+    Event 1 & yyyy-mm-dd\\
+    Event 2 & yyyy-mm-dd\\
+    Möte 1 & yyyy-mm-dd\\
+    Möte 2 & yyyy-mm-dd\\
+    \end{tabular}
+}
+
+
+\paragraf{§15}{Beslutssammanfattning}{
+
+
+}
+
+\paragraf{§16}{Action points}{
+
+    \Gustav{} ska:
+    \begin{itemize}
+    \item göra X
+    \item göra Y
+    \end{itemize}
+
+    \Cindy{} ska:
+    \begin{itemize}
+    \item Maila X
+    \item göra klart Y
+    \end{itemize}
+
+
+}
+\paragraf{§17}{Mötet avslutas}{\ordf{} avslutade mötet kl. hh:mm.}
+
+\signatur
+\end{document}
