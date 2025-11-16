@@ -1,6 +1,6 @@
 % bsk_latex_lib/bsk_formalia.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v11.0 Formalia Module (Robust expl3)]
+\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v11.2 Formalia Module (Fix missing temp vars)]
 
 \RequirePackage{xparse}
 \RequirePackage{booktabs}
@@ -13,6 +13,9 @@
 \seq_new:N  \g_bsk_absent_seq
 \tl_new:N   \l__bsk_person_name_tl
 \tl_new:N   \l__bsk_person_role_tl
+
+\tl_new:N   \l__bsk_temp_name_tl
+\tl_new:N   \l__bsk_temp_role_tl
 
 % --- Internal Logic ---
 
@@ -29,11 +32,11 @@
 % Internal function for \setMeetingOfficials
 \cs_new_protected:Npn \__bsk_formalia_set_officials:nnn #1#2#3
  {
-  \prop_gput:Nn \g_bsk_officials_prop {ordf_name}
+  \prop_gput:Nnn \g_bsk_officials_prop {ordf_name}
     { \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name} }
-  \prop_gput:Nn \g_bsk_officials_prop {sekr_name}
+  \prop_gput:Nnn \g_bsk_officials_prop {sekr_name}
     { \prop_item:cn {g_bsk_person_ \cs_to_str:N #2 _prop} {name} }
-  \prop_gput:Nn \g_bsk_officials_prop {just_name}
+  \prop_gput:Nnn \g_bsk_officials_prop {just_name}
     { \prop_item:cn {g_bsk_person_ \cs_to_str:N #3 _prop} {name} }
  }
 
@@ -55,8 +58,10 @@
   \begin{tabular}{ll}
    \seq_map_inline:Nn #1
     {
+     % Get name and role into temporary variables
      \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {name} \l__bsk_temp_name_tl
      \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {role} \l__bsk_temp_role_tl
+     % Use the variables in the table
      \l__bsk_temp_name_tl & \l__bsk_temp_role_tl \\
     }
   \end{tabular}

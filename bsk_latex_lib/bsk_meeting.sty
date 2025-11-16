@@ -1,6 +1,6 @@
 % bsk_latex_lib/bsk_meeting.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.11 Meeting Module (Robust expl3)]
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.12 Meeting Module (Robust expl3)]
 
 \RequirePackage{xparse}
 
@@ -10,7 +10,8 @@
 \cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
  {
   \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-  \paragraf{Mötet~öppnas}{Mötesordförande~\l_tmpa_tl~förklarade~mötet~öppnat.}
+  % FIX: Added braces around \l_tmpa_tl to prevent space eating
+  \paragraf{Mötet~öppnas}{Mötesordförande~{\l_tmpa_tl}~förklarade~mötet~öppnat.}
  }
 
 \cs_new_protected:Npn \__bsk_meeting_val_av_justerare:
@@ -20,9 +21,10 @@
   \prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
   \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
     \Beslut*{
-        att~välja~\l_tmpa_tl~till~mötesordförande.,
-        att~välja~\l_tmpb_tl~till~mötessekreterare.,
-        att~välja~\l_tmpc_tl~till~justeringsperson.
+        % FIX: Added braces {} around variables to separate them from the word "till"
+        att~välja~{\l_tmpa_tl}~till~mötesordförande.,
+        att~välja~{\l_tmpb_tl}~till~mötessekreterare.,
+        att~välja~{\l_tmpc_tl}~till~justeringsperson.
     }
   }
  }
