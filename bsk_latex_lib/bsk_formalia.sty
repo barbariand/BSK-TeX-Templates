@@ -1,8 +1,9 @@
 % bsk_latex_lib/bsk_formalia.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v10.2 Formalia Module (Signatures Fixed)]
+\ProvidesPackage{bsk_latex_lib/bsk_formalia}[2025/09/27 v11.0 Formalia Module (Robust expl3)]
 
 \RequirePackage{xparse}
+\RequirePackage{booktabs}
 
 \ExplSyntaxOn
 
@@ -12,19 +13,11 @@
 \seq_new:N  \g_bsk_absent_seq
 \tl_new:N   \l__bsk_person_name_tl
 \tl_new:N   \l__bsk_person_role_tl
-\tl_new:N   \l__bsk_temp_name_tl
-\tl_new:N   \l__bsk_temp_role_tl
 
-% --- Key Definitions for \newperson ---
-\keys_define:nn { bsk/person }
- {
-  name .tl_set:N = \l__bsk_person_name_tl,
-  name .default:n = \c_novalue,
-  role .tl_set:N = \l__bsk_person_role_tl,
- }
+% --- Internal Logic ---
 
-% --- User Command: \newperson ---
-\NewDocumentCommand{\newperson}{m m}
+% Internal function for \newperson
+\cs_new_protected:Npn \__bsk_formalia_new_person:nn #1#2
  {
   \prop_new:c {g_bsk_person_ \cs_to_str:N #1 _prop}
   \keys_set:nn { bsk/person } { name = \cs_to_str:N #1 }
@@ -33,8 +26,8 @@
   \prop_gput:cnV {g_bsk_person_ \cs_to_str:N #1 _prop} {role} \l__bsk_person_role_tl
  }
 
-% --- User Command: \setMeetingOfficials ---
-\NewDocumentCommand{\setMeetingOfficials}{m m m}
+% Internal function for \setMeetingOfficials
+\cs_new_protected:Npn \__bsk_formalia_set_officials:nnn #1#2#3
  {
   \prop_gput:Nn \g_bsk_officials_prop {ordf_name}
     { \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name} }
@@ -44,17 +37,19 @@
     { \prop_item:cn {g_bsk_person_ \cs_to_str:N #3 _prop} {name} }
  }
 
-% --- User Commands: \addPresent and \addAbsent ---
-\NewDocumentCommand{\addPresent}{m}{\seq_gput_right:Nn \g_bsk_present_seq {#1}}
-\NewDocumentCommand{\addAbsent}{m}{\seq_gput_right:Nn \g_bsk_absent_seq {#1}}
-\NewDocumentCommand{\clearAttendance}{}
+% Internal function for \person
+\cs_new:Npn \__bsk_formalia_get_person:n #1
  {
-  \prop_gclear:N \g_bsk_officials_prop
-  \seq_gclear:N \g_bsk_present_seq
-  \seq_gclear:N \g_bsk_absent_seq
+  \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name}
  }
 
-% --- Internal function to build an attendance table ---
+% Internal function for \getOfficial
+\cs_new:Npn \__bsk_formalia_get_official:n #1
+ {
+  \prop_item:Nn \g_bsk_officials_prop {#1}
+ }
+
+% Internal function for attendance lists
 \cs_new_protected:Npn \__bsk_build_attendance_table:N #1
  {
   \begin{tabular}{ll}
@@ -67,28 +62,75 @@
   \end{tabular}
  }
 
-% --- User Commands to PRINT attendance ---
-\NewDocumentCommand{\present}{}{\seq_if_empty:NF \g_bsk_present_seq {\paragraf{}{\textbf{Närvarande:}}{\__bsk_build_attendance_table:N \g_bsk_present_seq}}}
-\NewDocumentCommand{\absent}{}{\seq_if_empty:NF \g_bsk_absent_seq {\paragraf{}{\textbf{Frånvarande:}}{\__bsk_build_attendance_table:N \g_bsk_absent_seq}}}
+% --- User Commands (Wrappers) ---
+\keys_define:nn { bsk/person }
+ {
+  name .tl_set:N = \l__bsk_person_name_tl,
+  name .default:n = \c_novalue,
+  role .tl_set:N = \l__bsk_person_role_tl,
+ }
 
-% --- User Commands for Signatures ---
+\NewDocumentCommand{\newperson}{m m}
+ {
+  \__bsk_formalia_new_person:nn {#1} {#2}
+ }
+
+\NewDocumentCommand{\person}{m}
+ {
+  \__bsk_formalia_get_person:n {#1}
+ }
+
+\NewDocumentCommand{\setMeetingOfficials}{m m m}
+ {
+  \__bsk_formalia_set_officials:nnn {#1} {#2} {#3}
+ }
+
+\NewDocumentCommand{\addPresent}{m}
+ {
+  \seq_gput_right:Nn \g_bsk_present_seq {#1}
+ }
+\NewDocumentCommand{\addAbsent}{m}
+ {
+  \seq_gput_right:Nn \g_bsk_absent_seq {#1}
+ }
+\NewDocumentCommand{\clearAttendance}{}
+ {
+  \prop_gclear:N \g_bsk_officials_prop
+  \seq_gclear:N \g_bsk_present_seq
+  \seq_gclear:N \g_bsk_absent_seq
+ }
+
+\NewDocumentCommand{\present}{}
+ {
+  \seq_if_empty:NF \g_bsk_present_seq
+   {
+    \paragraf{Närvarande:}{\__bsk_build_attendance_table:N \g_bsk_present_seq}
+   }
+ }
+\NewDocumentCommand{\absent}{}
+ {
+  \seq_if_empty:NF \g_bsk_absent_seq
+   {
+    \paragraf{Frånvarande:}{\__bsk_build_attendance_table:N \g_bsk_absent_seq}
+   }
+ }
+
 \NewExpandableDocumentCommand{\getOfficial}{m}
- {\prop_item:Nn \g_bsk_officials_prop {#1}}
+ {
+  \__bsk_formalia_get_official:n {#1}
+ }
 
 \NewDocumentCommand{\signatures}{ }
  {
   \begin{table}[H]
   \noindent
   \begin{tabular*}{\linewidth}{l @{\extracolsep{\fill}} l}
-    % Chairperson
     \parbox[t]{2.5in}{\hrulefill \\ Mötesordförande \\ \getOfficial{ordf_name}} &
     \parbox[t]{2.5in}{\hrulefill \\ Datum} \\
-    \addlinespace % Adds vertical space from booktabs package
-    % Secretary
+    \addlinespace
     \parbox[t]{2.5in}{\hrulefill \\ Mötessekreterare \\ \getOfficial{sekr_name}} &
     \parbox[t]{2.5in}{\hrulefill \\ Datum} \\
     \addlinespace
-    % Adjuster
     \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just_name}} &
     \parbox[t]{2.5in}{\hrulefill \\ Datum}
   \end{tabular*}

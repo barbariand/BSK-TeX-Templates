@@ -14,7 +14,7 @@
     in {
       devShells.default = with pkgs;
         mkShell {
-          packages = with pkgs; [texliveFull tex-fmt];
+          packages = with pkgs; [tree-sitter texliveFull tex-fmt];
           shellHook = ''
           '';
         };

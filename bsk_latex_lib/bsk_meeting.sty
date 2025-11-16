@@ -1,21 +1,83 @@
 % bsk_latex_lib/bsk_meeting.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.8 Meeting Module (Closing Command)]
+\ProvidesPackage{bsk_latex_lib/bsk_meeting}[2025/09/27 v1.11 Meeting Module (Robust expl3)]
 
 \RequirePackage{xparse}
+
 \ExplSyntaxOn
 
-% --- Internal Formalia Point Commands ---
-\NewDocumentCommand{\moetetsOppnande}{}{\paragraf{Mötet~öppnas}{Mötesordförande~\getOfficial{ordf_name}~förklarade~mötet~öppnat.}}
-\NewDocumentCommand{\valAvJusterare}{}{\paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{\Beslut*{att~välja~\getOfficial{ordf_name}~till~mötesordförande.}{att~välja~\getOfficial{sekr_name}~till~mötessekreterare.}{att~välja~\getOfficial{just_name}~till~justeringsperson.}}}
-\NewDocumentCommand{\moetetsBehorigaUtlysande}{}{\paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}{\Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}}}
-\NewDocumentCommand{\yttrandeOchRostratt}{}{\paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}}
-\NewDocumentCommand{\faststallandeAvForedragningslista}{O{}}{\paragraf{§5}{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}}
-\NewDocumentCommand{\faststallandeAvForegaendeProtokoll}{O{}}{\paragrag{§6}{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}}
+% --- Internal Logic Functions ---
+\cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
+ {
+  \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
+  \paragraf{Mötet~öppnas}{Mötesordförande~\l_tmpa_tl~förklarade~mötet~öppnat.}
+ }
 
-% --- The Main Automated Formalia Command ---
+\cs_new_protected:Npn \__bsk_meeting_val_av_justerare:
+ {
+  \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
+  \prop_get:NnN \g_bsk_officials_prop {sekr_name} \l_tmpb_tl
+  \prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
+  \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
+    \Beslut*{
+        att~välja~\l_tmpa_tl~till~mötesordförande.,
+        att~välja~\l_tmpb_tl~till~mötessekreterare.,
+        att~välja~\l_tmpc_tl~till~justeringsperson.
+    }
+  }
+ }
+
+\cs_new_protected:Npn \__bsk_meeting_moetets_behoriga_utlysande:
+ {
+  \paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}
+   {
+    \Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}
+   }
+ }
+
+\cs_new_protected:Npn \__bsk_meeting_yttrande_och_rostratt:
+ {
+  \paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}
+ }
+
+\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foredragningslista:
+ {
+  \paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}
+ }
+
+\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foregaende_protokoll:
+ {
+  \paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}
+ }
+
+% --- User Commands (Wrappers) ---
+\NewDocumentCommand{\moetetsOppnande}{}
+ {
+  \__bsk_meeting_moetets_oppnande:
+ }
+\NewDocumentCommand{\valAvJusterare}{}
+ {
+  \__bsk_meeting_val_av_justerare:
+ }
+\NewDocumentCommand{\moetetsBehorigaUtlysande}{}
+ {
+  \__bsk_meeting_moetets_behoriga_utlysande:
+ }
+\NewDocumentCommand{\yttrandeOchRostratt}{}
+ {
+  \__bsk_meeting_yttrande_och_rostratt:
+ }
+\NewDocumentCommand{\faststallandeAvForedragningslista}{O{}}
+ {
+  \__bsk_meeting_faststallande_av_foredragningslista:
+ }
+\NewDocumentCommand{\faststallandeAvForegaendeProtokoll}{O{}}
+ {
+  \__bsk_meeting_faststallande_av_foregaende_protokoll:
+ }
+
 \NewDocumentCommand{\printFormalia}{}
-{
+ {
   \present
   \absent
   \subsection*{Formalia}
@@ -26,10 +88,9 @@
   \faststallandeAvForedragningslista
   \faststallandeAvForegaendeProtokoll
   \section*{Ärenden}
-}
+ }
 
-% --- New command to print closing matter ---
-\NewDocumentCommand{\printClosing}{}
+\DeclareDocumentCommand{\printClosing}{}
  {
   \section*{Avslutning}
   \printDecisionSummary

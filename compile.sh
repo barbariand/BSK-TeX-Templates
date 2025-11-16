@@ -14,6 +14,6 @@ latexmk -pdf -f \
   main.tex
 
 # Move the log file to a cleaner name and location for inspection.
-mv ./out/aux/main.log ./latex.log
+mv ./out/aux/main.log ./latex_log.txt
 
 echo "Compilation finished. PDF is in ./out/pdf/main.pdf"
