@@ -8,95 +8,96 @@
 
 % --- Internal Logic Functions ---
 \cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
- {
-  \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-  % FIX: Added braces around \l_tmpa_tl to prevent space eating
-  \paragraf{Mötet~öppnas}{Mötesordförande~{\l_tmpa_tl}~förklarade~mötet~öppnat.}
- }
+{
+\prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
+% FIX: Added braces around \l_tmpa_tl to prevent space eating
+\paragraf{Mötet~öppnas}{Mötesordförande~{\l_tmpa_tl}~förklarade~mötet~öppnat.}
+}
 
 \cs_new_protected:Npn \__bsk_meeting_val_av_justerare:
- {
-  \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-  \prop_get:NnN \g_bsk_officials_prop {sekr_name} \l_tmpb_tl
-  \prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
-  \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
-    \Beslut*{
-        % FIX: Added braces {} around variables to separate them from the word "till"
-        att~välja~{\l_tmpa_tl}~till~mötesordförande.,
-        att~välja~{\l_tmpb_tl}~till~mötessekreterare.,
-        att~välja~{\l_tmpc_tl}~till~justeringsperson.
-    }
-  }
- }
+{
+\prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
+\prop_get:NnN \g_bsk_officials_prop {sekr_name} \l_tmpb_tl
+\prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
+\paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
+\Beslut*{
+% FIX: Added braces {} around variables to separate them from the word "till"
+att~välja~{\l_tmpa_tl}~till~mötesordförande.,
+att~välja~{\l_tmpb_tl}~till~mötessekreterare.,
+att~välja~{\l_tmpc_tl}~till~justeringsperson.
+}
+}
+}
 
 \cs_new_protected:Npn \__bsk_meeting_moetets_behoriga_utlysande:
- {
-  \paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}
-   {
-    \Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}
-   }
- }
+{
+	\paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}
+	{
+		\Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}
+	}
+}
 
 \cs_new_protected:Npn \__bsk_meeting_yttrande_och_rostratt:
- {
-  \paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}
- }
+{
+	\paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}
+}
 
 \cs_new_protected:Npn \__bsk_meeting_faststallande_av_foredragningslista:
- {
-  \paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}
- }
+{
+	\paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}
+}
 
 \cs_new_protected:Npn \__bsk_meeting_faststallande_av_foregaende_protokoll:
- {
-  \paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}
- }
+{
+	\paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}
+}
 
 % --- User Commands (Wrappers) ---
 \NewDocumentCommand{\moetetsOppnande}{}
- {
-  \__bsk_meeting_moetets_oppnande:
- }
+{
+	\__bsk_meeting_moetets_oppnande:
+}
 \NewDocumentCommand{\valAvJusterare}{}
- {
-  \__bsk_meeting_val_av_justerare:
- }
+{
+	\__bsk_meeting_val_av_justerare:
+}
 \NewDocumentCommand{\moetetsBehorigaUtlysande}{}
- {
-  \__bsk_meeting_moetets_behoriga_utlysande:
- }
+{
+	\__bsk_meeting_moetets_behoriga_utlysande:
+}
 \NewDocumentCommand{\yttrandeOchRostratt}{}
- {
-  \__bsk_meeting_yttrande_och_rostratt:
- }
+{
+	\__bsk_meeting_yttrande_och_rostratt:
+}
 \NewDocumentCommand{\faststallandeAvForedragningslista}{O{}}
- {
-  \__bsk_meeting_faststallande_av_foredragningslista:
- }
+{
+	\__bsk_meeting_faststallande_av_foredragningslista:
+}
 \NewDocumentCommand{\faststallandeAvForegaendeProtokoll}{O{}}
- {
-  \__bsk_meeting_faststallande_av_foregaende_protokoll:
- }
+{
+	\__bsk_meeting_faststallande_av_foregaende_protokoll:
+}
 
 \NewDocumentCommand{\printFormalia}{}
- {
-  \present
-  \absent
-  \subsection*{Formalia}
-  \moetetsOppnande
-  \valAvJusterare
-  \moetetsBehorigaUtlysande
-  \yttrandeOchRostratt
-  \faststallandeAvForedragningslista
-  \faststallandeAvForegaendeProtokoll
-  \section*{Ärenden}
- }
+{
+	\present
+	\absent
+	\subsection*{Formalia}
+	\moetetsOppnande
+	\valAvJusterare
+	\moetetsBehorigaUtlysande
+	\yttrandeOchRostratt
+	\faststallandeAvForedragningslista
+	\faststallandeAvForegaendeProtokoll
+	\section*{Ärenden}
+}
 
 \DeclareDocumentCommand{\printClosing}{}
- {
-  \section*{Avslutning}
-  \printDecisionSummary
-  \signatures
- }
+{
+	\paragraf{Mötet avslutas}{\getOfficial{ordf_name}~avslutade~mötet~kl.~hh:mm.}
+	\section*{Avslutning}
+	\printDecisionSummary
+	\signatures
+}
 
 \ExplSyntaxOff
