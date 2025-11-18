@@ -1,0 +1,58 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/data/language}[2025/11/20 v1.3 Language Switch System]
+
+\RequirePackage{xparse}
+\ExplSyntaxOn
+\tl_new:N \g_bsk_current_lang_tl
+\tl_set:Nn \g_bsk_current_lang_tl {swe}
+\seq_new:N \l_bsk_lang_commands_seq
+\cs_new_protected:Npn \__bsk_lang_define_core:nnn #1#2#3
+{
+    \cs_new:cpn { __bsk_text_#1_swe } {#2~}
+    \cs_new:cpn { __bsk_text_#1_eng } {#3~}
+    \seq_gput_right:Nn \l_bsk_lang_commands_seq {#1}
+    \__bsk_lang_switch_cmd:nn {#1} {\g_bsk_current_lang_tl}
+}
+
+\NewDocumentCommand{\languageDef}{m s m O{\q_no_value}}
+{
+    \IfBooleanTF{#2}
+    {
+        \__bsk_lang_define_core:nnn {#1} {#3} {#3}
+    }
+    {
+        \IfNoValueTF{#4}
+        {
+
+            \__bsk_lang_define_core:nnn {#1} {#3} {ERROR:\#4Missing}
+        }
+        {
+            \__bsk_lang_define_core:nnn {#1} {#3} {#4}
+        }
+    }
+}
+
+\cs_new_protected:Npn \__bsk_lang_switch_cmd:nn #1#2
+{
+    \cs_set_eq:cN { #1 } { __bsk_text_#1_#2 }
+}
+
+\cs_new_protected:Npn \__bsk_lang_switch_all:n #1
+{
+    \tl_gset:Nn \g_bsk_current_lang_tl {#1}
+    \seq_map_inline:Nn \l_bsk_lang_commands_seq
+    {
+        \__bsk_lang_switch_cmd:nn {##1} {#1}
+    }
+}
+
+\NewDocumentCommand{\setSectionLangToSwe}{}
+{
+    \__bsk_lang_switch_all:n {swe}
+}
+\NewDocumentCommand{\setSectionLangToEng}{}
+{
+    \__bsk_lang_switch_all:n {eng}
+}
+
+\ExplSyntaxOff

@@ -1,4 +1,3 @@
-% bsk_latex_lib/bsk_formalia.sty
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.2 Formalia Module (Fix missing temp vars)]
 
@@ -58,10 +57,8 @@
   \begin{tabular}{ll}
    \seq_map_inline:Nn #1
     {
-     % Get name and role into temporary variables
      \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {name} \l__bsk_temp_name_tl
      \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {role} \l__bsk_temp_role_tl
-     % Use the variables in the table
      \l__bsk_temp_name_tl & \l__bsk_temp_role_tl \\
     }
   \end{tabular}

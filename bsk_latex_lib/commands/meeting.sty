@@ -10,7 +10,6 @@
 \cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
 {
 \prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-% FIX: Added braces around \l_tmpa_tl to prevent space eating
 \paragraf{Mötet~öppnas}{Mötesordförande~{\l_tmpa_tl}~förklarade~mötet~öppnat.}
 }
 
@@ -21,7 +20,6 @@
 \prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
 \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
 \Beslut*{
-% FIX: Added braces {} around variables to separate them from the word "till"
 att~välja~{\l_tmpa_tl}~till~mötesordförande.,
 att~välja~{\l_tmpb_tl}~till~mötessekreterare.,
 att~välja~{\l_tmpc_tl}~till~justeringsperson.

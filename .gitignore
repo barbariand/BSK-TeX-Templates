@@ -1,8 +1,5 @@
 out/
 main.tex
-./out/aux/*
-./out/docx/*
-./out/pdf/*
 .direnv/
 latex.log
 test.txt

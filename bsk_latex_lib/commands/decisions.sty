@@ -1,4 +1,3 @@
-% bsk_latex_lib/bsk_decisions.sty
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{bsk_latex_lib/commands/decisions}[2025/09/27 v3.0 Decisions Module]
 
@@ -7,43 +6,37 @@
 \ExplSyntaxOn
 
 % --- Data Storage ---
-% A sequence to store all decisions for the final summary.
 \seq_new:N \g_bsk_decisions_seq
 
 % --- Internal function to add a decision to the global list ---
-% It stores the paragraph number and the decision text.
-% We use a property list for each decision to store metadata.
 \cs_new_protected:Npn \__bsk_add_decision:n #1
- {
-  \seq_gput_right:Nn \g_bsk_decisions_seq
-   {
-    \prop_new:N \l_tmpa_prop
-    \prop_put:Nn \l_tmpa_prop {paragraph} { \arabic{paragrafcounter} }
-    \prop_put:Nn \l_tmpa_prop {text}      { #1 }
-    \l_tmpa_prop
-   }
- }
+{
+	\seq_gput_right:Nn \g_bsk_decisions_seq
+	{
+		\prop_new:N \l_tmpa_prop
+		\prop_put:Nn \l_tmpa_prop {paragraph} { \arabic{paragrafcounter} }
+		\prop_put:Nn \l_tmpa_prop {text}      { #1 }
+		\l_tmpa_prop
+	}
+}
 
 % --- User Command: \Beslut ---
-% Takes a comma-separated list of decisions.
-% Starred version \Beslut* does not save to the summary.
 \NewDocumentCommand{\Beslut}{ s m }
- {
-  \group_begin:
-  \par\noindent\textbf{Styrelsen~beslutade}
-  \begin{itemize}
-    \clist_map_inline:nn {#2}
-     {
-      \item \textit{att}~(##1)
-      % If the command is NOT starred, save the decision to the list.
-      \IfBooleanF {#1}
-       {
-        \__bsk_add_decision:n { ##1 }
-       }
-     }
-  \end{itemize}
-  \group_end:
- }
+{
+	\group_begin:
+	\par\noindent\textbf{Styrelsen~beslutade}
+	\begin{itemize}
+		\clist_map_inline:nn {#2}
+		{
+		\item \textit{att}~(##1)
+		      \IfBooleanF {#1}
+		      {
+			      \__bsk_add_decision:n { ##1 }
+		      }
+		      }
+	\end{itemize}
+	\group_end:
+}
 
 % --- User Commands for motions (\yrkar) ---
 \NewDocumentCommand{\bifall}{}{\textbf{Yrkandet~bifölls.}}
@@ -51,32 +44,31 @@
 
 % \yrkar{proposer}{motion text}{result (\bifall or \avslag)}
 \NewDocumentCommand{\yrkar}{m m m}
- {
-  #1~yrkar~på~att~\textit{"#2"}.~#3
-  % Check if the result was \bifall. If so, add it to the decision list.
-  \token_if_eq_meaning:NNT #3 \bifall
-   {
-    \__bsk_add_decision:n { #2 }
-   }
- }
+{
+	#1~yrkar~på~att~\textit{"#2"}.~#3
+	\token_if_eq_meaning:NNT #3 \bifall
+	{
+		\__bsk_add_decision:n { #2 }
+	}
+}
 
 % --- Command to print the final summary of decisions ---
 \NewDocumentCommand{\printDecisionSummary}{}
- {
-  \seq_if_empty:NF \g_bsk_decisions_seq
-   {
-    \stepcounter{paragrafcounter} % Increment for the summary paragraph
-    \paragraf{Beslutssammanfattning}
-     {
-      Följande~beslut~har~fattats~under~mötet:
-      \begin{itemize}
-        \seq_map_inline:Nn \g_bsk_decisions_seq
-         {
-          \prop_get:NnN ##1 {text} \l_tmpa_tl
-          \item[\S\prop_get:Nn ##1 {paragraph}] \l_tmpa_tl
-         }
-      \end{itemize}
-     }
-   }
- }
+{
+	\seq_if_empty:NF \g_bsk_decisions_seq
+	{
+		\stepcounter{paragrafcounter}
+		\paragraf{Beslutssammanfattning}
+		{
+			Följande~beslut~har~fattats~under~mötet:
+			\begin{itemize}
+				\seq_map_inline:Nn \g_bsk_decisions_seq
+				{
+				\prop_get:NnN ##1 {text} \l_tmpa_tl
+				\item[\S\prop_get:Nn ##1 {paragraph}] \l_tmpa_tl
+				      }
+			\end{itemize}
+		}
+	}
+}
 \ExplSyntaxOff
