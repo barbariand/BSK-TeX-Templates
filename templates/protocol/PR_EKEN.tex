@@ -1,0 +1,132 @@
+%% Put this in main.tex and it will work
+
+\documentclass{article}
+
+% Load your entire custom package library with one line.
+\usepackage{bsk_latex_lib/bsk_latex_lib}
+
+% --- Document Configuration ---
+% All high-level settings for this specific document are placed here.
+\setupProtokoll{
+  sektion = {eken},
+  plats   = {Karlskrona/Microsoft Teams},
+  datum   = {2025-mm-dd},
+}
+
+% --- Person Database ---
+% Define all relevant people and their roles.
+\newperson{\Ordfarande} { name = {Ordförande},    role = {Ordförande} }
+\newperson{\Person}  { name = {Namn Namnson},     role = {Vice-ordförande} }
+\newperson{\Namn} { name = {Namn Namnson},       role = {Sekreterare} }
+% \newperson{\Namn} { name = {Namn Namnson}, role = {Ekonomiansvarig} }
+% \newperson{\Namn} { name = {Namn Namnson},   role = {Ledamot} }
+% \newperson{\Namn}  { name = {Namn Namnson},   role = {Ledamot} }
+% \newperson{\Namn} { name = {Namn Namnson}, role = {Ledamot} }
+% \newperson{\Namn} { name = {Namn Namnson},    role = {Suppleant} }
+% \newperson{\Namn} { name = {Namn Namnson},   role = {Suppleant} }
+
+\begin{document}
+
+% --- Meeting-Specific Data ---
+% This is the only section that needs to be filled in for each new meeting.
+
+% 1. Clear any data from previous meetings (good practice).
+\clearAttendance
+
+% 2. Assign the officials for THIS meeting.
+\setMeetingOfficials{\Ordfarande}{\Person}{\Namn} % Chairperson, Secretary, Adjuster
+
+% 3. Set the attendance for THIS meeting.
+\addPresent{\Ordfarande}
+\addPresent{\Person}
+\addPresent{\Namn}
+
+% \addAbsent{\Namn}
+% \addAbsent{\Namn}
+
+% --- Automated Document Generation ---
+
+% This single command now generates the attendance lists and all
+\printFormalia
+
+% --- Meeting Content (Ärenden) ---
+% The unique content of the meeting is written here.
+
+\paragraf{Skrivelser}{
+  Mail från xx angående yy \\
+  Mail från xx angående yy \\
+}
+
+\paragraf{Rapporter}{
+  % UPDATED: Use \person{\Melker} to get the name
+  \person{\Ordfarande} har:
+  \begin{itemize}
+    \item Inget att rapportera.
+  \end{itemize}
+  \person{\Namn} har:
+  \begin{itemize}
+    \item Inget att rapportera.
+  \end{itemize}
+}
+
+\paragraf{Tidigare action-points}{}
+
+\paragraf{Studiebevakning}{
+  \textbf{Möte som vi kanske varit på}\\
+  Brödtext
+  \enter
+
+  \textbf{Annat möte eller punkt}\\
+  Brödtext
+}
+\paragraf{Feedback-soffan}{
+  Inget att rapportera.
+}
+
+\paragraf{Studiesocialt}{
+  \textbf{Event}\\
+  Brödtext
+  \enter
+
+  \textbf{Annat event}\\
+  Brödtext
+}
+
+\paragraf{Styrelsen}{}
+\paragraf{Vibe check}{}
+
+% --- Closing Section ---
+% The \printClosing command handles the decision summary and signatures.
+% The paragraphs for Övrigt, Kalender, etc., are placed before it.
+
+\paragraf{Övrigt}{}
+\paragraf{Kalender}{
+  \begin{tabular}{ll}
+  Nästa styrelse möte & yyyy-mm-dd\\
+  Event 1 & yyyy-mm-dd\\
+  Event 2 & yyyy-mm-dd\\
+  Möte 1 & yyyy-mm-dd\\
+  Möte 2 & yyyy-mm-dd\\
+  \end{tabular}
+}
+
+% §15 for Beslutssammanfattning is now generated automatically by \printClosing.
+
+\paragraf{Action points}{
+  \person{\Ordfarande} ska:
+  \begin{itemize}
+    \item göra X
+    \item göra Y
+  \end{itemize}
+  \person{\Namn} ska:
+  \begin{itemize}
+    \item Maila X
+    \item göra klart Y
+  \end{itemize}
+}
+
+
+\printClosing
+
+\end{document}
+

@@ -1,0 +1,21 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bsk_latex_lib/layout/structure}[2025/09/27 v1.0 Structure Module]
+
+\RequirePackage{float} % For the [H] option to place tables exactly here
+\RequirePackage{array}
+\newcounter{paragrafcounter}
+\NewDocumentCommand{\paragraf}{s m m}{%
+  \begin{table}[H]
+    \renewcommand\arraystretch{1.25}%
+    \begin{tabular}{ p{1.5cm} p{4cm} >{\raggedright\arraybackslash}p{9cm} }
+      \IfBooleanTF{#1}{
+        §
+      }{
+        \stepcounter{paragrafcounter}
+        §\theparagrafcounter
+      }
+      & \raggedright #2
+      & #3
+    \end{tabular}
+  \end{table}
+}
