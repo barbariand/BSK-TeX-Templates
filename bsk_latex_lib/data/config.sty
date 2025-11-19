@@ -82,17 +82,19 @@
     \nobreakspace FUM \nobreakspace \g_bsk_config_fum_tl
   }
 }
-
+\languageDef{or}{verksamhetsrapport}[Operational~report]
+\languageDef{protocol}{Protokoll~fört~vid}[Protocol~from]
+\languageDef{meet}{möte~i}[meeting~held~at]
 % --- Header Title Logic ---
 \NewExpandableDocumentCommand{\bskDocumentTitle}{}
 {
   \str_case:Vn \g_bsk_config_typ_tl
   {
     {protokoll}
-      { Protokoll~fört~vid~\g_bsk_config_sektion_tl{}~möte~i~\g_bsk_config_plats_tl }
+      {\protocol~\g_bsk_config_sektion_tl{}~\meet~\g_bsk_config_plats_tl }
 
     {verksamhetsrapport}
-      { Verksamhetsrapport~\g_bsk_config_sektion_tl \bskVerksamhetsrapportSuffix }
+      {\or~\g_bsk_config_sektion_tl \bskVerksamhetsrapportSuffix }
 
     {fristaende}
       {
