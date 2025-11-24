@@ -15,29 +15,28 @@
 
 \tl_new:N \g_bsk_config_titel_tl
 
-\tl_new:N \g_bsk_config_ar_tl   % NY: År för rapporten
-\tl_new:N \g_bsk_config_fum_tl  % NY: FUM-nummer
+\tl_new:N \g_bsk_config_ar_tl
+\tl_new:N \g_bsk_config_fum_tl
 
 % --- Key-Value Interface ---
 \keys_define:nn { bsk/config }
 {
-  sektion .code:n = {
-    \prop_get:cnN { g_bsk_section_#1_prop } { fullname } \g_bsk_config_sektion_tl
-    \prop_get:cnN { g_bsk_section_#1_prop } { color }    \g_bsk_config_farg_tl
-    \prop_get:cnN { g_bsk_section_#1_prop } { logo }     \g_bsk_config_logga_tl
+	sektion .code:n = {
+			\prop_get:cnN { g_bsk_section_#1_prop } { fullname } \g_bsk_config_sektion_tl
+			\prop_get:cnN { g_bsk_section_#1_prop } { color }    \g_bsk_config_farg_tl
+			\prop_get:cnN { g_bsk_section_#1_prop } { logo }     \g_bsk_config_logga_tl
 
-    \cs_set_eq:NN \meetingSektion \g_bsk_config_sektion_tl
-    \cs_set_eq:NN \meetingFarg \g_bsk_config_farg_tl
-    \cs_set_eq:NN \meetingLogga \g_bsk_config_logga_tl
-  },
-  plats .tl_set:N = \g_bsk_config_plats_tl,
-  datum .tl_set:N = \g_bsk_config_datum_tl,
-  titel .tl_set:N = \g_bsk_config_titel_tl,
-  % NYA NYCKLAR
-  ar    .tl_set:N = \g_bsk_config_ar_tl,
-  ar    .initial:n = {},
-  fum   .tl_set:N = \g_bsk_config_fum_tl,
-  fum   .initial:n = {},
+			\cs_set_eq:NN \meetingSektion \g_bsk_config_sektion_tl
+			\cs_set_eq:NN \meetingFarg \g_bsk_config_farg_tl
+			\cs_set_eq:NN \meetingLogga \g_bsk_config_logga_tl
+		},
+	plats .tl_set:N = \g_bsk_config_plats_tl,
+	datum .tl_set:N = \g_bsk_config_datum_tl,
+	titel .tl_set:N = \g_bsk_config_titel_tl,
+	ar    .tl_set:N = \g_bsk_config_ar_tl,
+	ar    .initial:n = {},
+	fum   .tl_set:N = \g_bsk_config_fum_tl,
+	fum   .initial:n = {},
 }
 
 % --- Public Init Functions (API) ---
@@ -45,22 +44,22 @@
 % 1. För Protokoll
 \NewDocumentCommand{\setupProtokoll}{ m }
 {
-  \tl_gset:Nn \g_bsk_config_typ_tl {protokoll}
-  \keys_set:nn { bsk/config } { #1 }
+	\tl_gset:Nn \g_bsk_config_typ_tl {protokoll}
+	\keys_set:nn { bsk/config } { #1 }
 }
 
 % 2. För Verksamhetsrapporter (Använder de nya nycklarna)
 \NewDocumentCommand{\setupVerksamhetsrapport}{ m }
 {
-  \tl_gset:Nn \g_bsk_config_typ_tl {verksamhetsrapport}
-  \keys_set:nn { bsk/config } { #1 }
+	\tl_gset:Nn \g_bsk_config_typ_tl {verksamhetsrapport}
+	\keys_set:nn { bsk/config } { #1 }
 }
 
 % 3. För Självstående dokument
 \NewDocumentCommand{\setupDokument}{ m }
 {
-  \tl_gset:Nn \g_bsk_config_typ_tl {fristaende}
-  \keys_set:nn { bsk/config } { #1 }
+	\tl_gset:Nn \g_bsk_config_typ_tl {fristaende}
+	\keys_set:nn { bsk/config } { #1 }
 }
 
 % --- Accessors / Getters ---
@@ -71,38 +70,38 @@
 % --- Hjälpfunktion för att lägga till År och FUM i rubriken ---
 \NewExpandableDocumentCommand{\bskVerksamhetsrapportSuffix}{}
 {
-  % Lägg till ÅR om det är satt
-  \tl_if_empty:NF \g_bsk_config_ar_tl
-  {
-    \nobreakspace \g_bsk_config_ar_tl
-  }
-  % Lägg till FUM och nummer om det är satt
-  \tl_if_empty:NF \g_bsk_config_fum_tl
-  {
-    \nobreakspace FUM \nobreakspace \g_bsk_config_fum_tl
-  }
+	% Lägg till ÅR om det är satt
+	\tl_if_empty:NF \g_bsk_config_ar_tl
+	{
+		\nobreakspace \g_bsk_config_ar_tl
+	}
+	% Lägg till FUM och nummer om det är satt
+	\tl_if_empty:NF \g_bsk_config_fum_tl
+	{
+		\nobreakspace FUM \nobreakspace \g_bsk_config_fum_tl
+	}
 }
-\languageDef{or}{verksamhetsrapport}[Operational~report]
+\languageDef{report}{Verksamhetsrapport}[Operational~report]
 \languageDef{protocol}{Protokoll~fört~vid}[Protocol~from]
 \languageDef{meet}{möte~i}[meeting~held~at]
 % --- Header Title Logic ---
 \NewExpandableDocumentCommand{\bskDocumentTitle}{}
 {
-  \str_case:Vn \g_bsk_config_typ_tl
-  {
-    {protokoll}
-      {\protocol~\g_bsk_config_sektion_tl{}~\meet~\g_bsk_config_plats_tl }
+	\str_case:Vn \g_bsk_config_typ_tl
+	{
+		{protokoll}
+			{\protocol~\g_bsk_config_sektion_tl{}~\meet~\g_bsk_config_plats_tl }
 
-    {verksamhetsrapport}
-      {\or~\g_bsk_config_sektion_tl \bskVerksamhetsrapportSuffix }
+			{verksamhetsrapport}
+			{\report~\g_bsk_config_sektion_tl \bskVerksamhetsrapportSuffix }
 
-    {fristaende}
-      {
-        \tl_if_empty:NTF \g_bsk_config_titel_tl
-          { \g_bsk_config_sektion_tl }
-          { \g_bsk_config_titel_tl }
-      }
-  }
+			{fristaende}
+			{
+				\tl_if_empty:NTF \g_bsk_config_titel_tl
+				{ \g_bsk_config_sektion_tl }
+				{ \g_bsk_config_titel_tl }
+			}
+	}
 }
 
 \ExplSyntaxOff
