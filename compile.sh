@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
 
-# This script compiles main.tex and cleans up auxiliary files.
+# Skapa kataloger om de inte finns
+mkdir -p ./out/pdf ./out/aux
 
-# Clean the output directories to ensure a fresh build
+# Rensa gamla filer
 rm -f ./out/pdf/*
 rm -f ./out/aux/*
-rm -f ./latex.log
+rm -f ./latex_log.txt
 
+# Kör latexmk
+# Vi använder -e för att sätta interna Perl-variabler som saknar egna flaggor
 latexmk -pdf -f \
   -interaction=nonstopmode \
-  -outdir=./out/aux \
-  -out2dir=./out/pdf \
+  -recorder \
+  -bibtex- \
+  -e '$max_repeat=5;' \
+  -auxdir=./out/aux \
+  -outdir=./out/pdf \
   main.tex
 
-# Move the log file to a cleaner name and location for inspection.
-mv ./out/aux/main.log ./latex_log.txt
+# Kopiera loggfilen för enklare inspektion
+if [ -f "./out/aux/main.log" ]; then
+    cp ./out/aux/main.log ./latex_log.txt
+fi
 
 echo "Compilation finished. PDF is in ./out/pdf/main.pdf"

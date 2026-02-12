@@ -1,8 +1,5 @@
-
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib}[2025/09/27 v1.2 BSK Protocol Package (Fixes)]
-
-
+\ProvidesPackage{bsk_latex_lib/bsk_latex_lib}[2025/09/27 v1.2 BSK Protocol Package]
 
 \RequirePackage{bsk_latex_lib/preamble}
 
@@ -12,20 +9,14 @@
 \RequirePackage{bsk_latex_lib/sections/section_colours}
 \RequirePackage{bsk_latex_lib/sections/sections}
 
-
 \RequirePackage{bsk_latex_lib/layout/layout}
 \RequirePackage{bsk_latex_lib/layout/structure}
-
 
 \RequirePackage{bsk_latex_lib/commands/formalia}
 \RequirePackage{bsk_latex_lib/commands/decisions}
 \RequirePackage{bsk_latex_lib/commands/meeting}
 
-
-
-\NewDocumentCommand{\clearAll}{ }
-{
+\NewDocumentCommand{\clearAll}{ }{
   \clearAttendance
   \clearDecisions
 }
-

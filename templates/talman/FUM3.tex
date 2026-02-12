@@ -1,0 +1,86 @@
+\PassOptionsToPackage{table}{xcolor}
+\documentclass{article}
+
+\usepackage{bsk_latex_lib/bsk_latex_lib}
+\usepackage{enumitem}
+\NewDocumentCommand{\pres}{m}{%
+    \textbf{Presenteras av #1}\par
+}
+% --- Document Configuration ---
+\setupDokument{
+  sektion = {root},
+  titel   = {FUM MANUS FUM 2 2025},
+  datum   = {2025-11-20},
+}
+% allows you to write
+% \fumNote[optional size under]{Point of order}[Optional who presents]{Additional comments}
+\NewDocumentCommand{\fumNote}{s O{2cm} +m o +m}{%
+    \IfBooleanTF{#1}{%
+        \note*[#2]{#3}{%
+            \IfValueT{#4}{\pres{#4}}%
+            #5%
+        }%
+    }{%
+        \note[#2]{#3}{%
+            \IfValueT{#4}{\pres{#4}}%
+            #5%
+        }%
+    }%
+}
+\begin{document}
+\section{FUM Manus FUM 2 2025}
+\paragraf*{Snabbfraser}{
+	\begin{itemize}[nosep, leftmargin=*]
+		\item Nästa talare [NAMN NAMNSSON]
+		\item Då kör vi replik. // Replik av [NAMN NAMNSSON]
+		\item Ingen på talarlistan.
+		\item Är Fullmäktige redo att gå till beslut? Någon däremot svara då JA.
+		\item Jag finner oss i beslut.
+		\item Då yrkar jag på [P\#\#.\#-\#\#], någon däremot svarar då JA.
+		\item \textbf{Jag finner [BIFALL; AVSLAG]}
+	\end{itemize}
+
+	\vspace{1em}
+
+	\begin{itemize}[nosep, leftmargin=*]
+		\item Next Speaker [NAME NAME SON]
+		\item Then we have a reply. // Reply from [NAME NAMESON]
+		\item No one on the speakers list.
+		\item Is the Council ready to go to decision? Anyone opposing say AIY.
+		\item I find us in decision.
+		\item Is it the decision of the Council to approve [P\#\#.\#-\#\#]? Anyone opposing say AIY.
+		\item \textbf{I find [APPROVAL; REFUSAL]}
+	\end{itemize}
+}
+
+\section{FUM Ordning}
+\newpage
+\fumNote{Mötet öppnas}[Talman]{Hej och välkomna till Blekinge studentkårs andra ordinarie Fullmäktige. Härmed öppnar jag det andra ordinarie fullmäktighetsmötet för styrelseår 2025-2026 kl TID}
+\fumNote{Närvaro-, yttrande- och rösträtt}[Talman]{[Läs från Voteit]}
+\fumNote{Mötesordförande}[Talman]{[LÄS diskutionen]}
+\fumNote{Mötessekreterare}[Talman]{[LÄS diskutionen]}
+\fumNote{Mötesjusterare}[Talman]{[LÄS diskutionen]}
+\fumNote{Fråga om mötets behöriga utlysande och beslutsmässighet}[Talman]{[LÄS diskutionen]}
+\fumNote{Fastställande av dagordningen}[Talman]{[LÄS diskutionen]}
+\fumNote[4cm]{Ekonomisk rapport}[Ekonomichefen]{}
+\fumNote[6cm]{Verksamhetsrapporter}{
+  \begin{itemize}
+    \item \rot
+    \item \smoer
+    \item \bits
+    \item \boss
+    \item \dk
+    \item \eken
+    \item \kids
+    \item \kps
+    \item \ks
+    \item \muk
+    \item \mf
+    \item \rost
+    \item \sexz
+    \item \sit
+   \end{itemize}
+}
+%Unikt för varje Ordinarie FUM
+\fumNote{}
+\end{document}

@@ -81,25 +81,25 @@
 		\nobreakspace FUM \nobreakspace \g_bsk_config_fum_tl
 	}
 }
-\languageDef{report}{Verksamhetsrapport}[Operational~report]
-\languageDef{protocol}{Protokoll~fört~vid}[Protocol~from]
-\languageDef{meet}{möte~i}[meeting~held~at]
+\languageDef{report}{Verksamhetsrapport}[Operational report]
+\languageDef{protocol}{Protokoll fört vid}[Protocol from]
+\languageDef{meet}{möte i}[meeting held at]
 % --- Header Title Logic ---
 \NewExpandableDocumentCommand{\bskDocumentTitle}{}
 {
 	\str_case:Vn \g_bsk_config_typ_tl
 	{
 		{protokoll}
-			{\protocol~\g_bsk_config_sektion_tl{}~\meet~\g_bsk_config_plats_tl }
+			{\protocol\nobreakspace\g_bsk_config_sektion_tl{}\nobreakspace\meet\nobreakspace\g_bsk_config_plats_tl}
 
 			{verksamhetsrapport}
-			{\report~\g_bsk_config_sektion_tl \bskVerksamhetsrapportSuffix }
+			{\report\nobreakspace\g_bsk_config_sektion_tl\nobreakspace\bskVerksamhetsrapportSuffix}
 
 			{fristaende}
 			{
 				\tl_if_empty:NTF \g_bsk_config_titel_tl
-				{ \g_bsk_config_sektion_tl }
-				{ \g_bsk_config_titel_tl }
+				{\g_bsk_config_sektion_tl}
+				{\g_bsk_config_titel_tl}
 			}
 	}
 }

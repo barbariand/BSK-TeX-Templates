@@ -1,41 +1,48 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/data/language}[2025/11/20 v1.3 Language Switch System]
+\ProvidesPackage{bsk_latex_lib/data/language}[2025/11/20 v1.4 Language Switch System]
 
 \RequirePackage{xparse}
+\RequirePackage{xspace} % Hanterar mellanslag intelligent
+
 \ExplSyntaxOn
 \tl_new:N \g_bsk_current_lang_tl
 \tl_set:Nn \g_bsk_current_lang_tl {swe}
 \seq_new:N \l_bsk_lang_commands_seq
 
+% Intern funktion för att lagra texten utan mellanslag
 \cs_new_protected:Npn \__bsk_lang_define_core:nnn #1#2#3
 {
-    \cs_new:cpn { __bsk_text_#1_swe } {#2~}
-    \cs_new:cpn { __bsk_text_#1_eng } {#3~}
+    \cs_new:cpn { __bsk_text_#1_swe } {#2}
+    \cs_new:cpn { __bsk_text_#1_eng } {#3}
     \seq_gput_right:Nn \l_bsk_lang_commands_seq {#1}
     \__bsk_lang_switch_cmd:nn {#1} {\g_bsk_current_lang_tl}
 }
+\cs_generate_variant:Nn \__bsk_lang_define_core:nnn { Vnn }
 
 \NewDocumentCommand{\languageDef}{m s m O{\q_no_value}}
 {
+    \tl_set:Nx \l_tmpa_tl { \tl_to_str:n {#1} }
+    \regex_replace_once:nnN { ^ \\ } { } \l_tmpa_tl
+
     \IfBooleanTF{#2}
     {
-        \__bsk_lang_define_core:nnn {#1} {#3} {#3}
+        \__bsk_lang_define_core:Vnn \l_tmpa_tl {#3} {#3}
     }
     {
         \IfNoValueTF{#4}
         {
-            \__bsk_lang_define_core:nnn {#1} {#3} {ERROR:\#4Missing}
+            \__bsk_lang_define_core:Vnn \l_tmpa_tl {#3} {ERROR:\#4Missing}
         }
         {
-            \__bsk_lang_define_core:nnn {#1} {#3} {#4}
+            \__bsk_lang_define_core:Vnn \l_tmpa_tl {#3} {#4}
         }
     }
 }
 
 \cs_new_protected:Npn \__bsk_lang_switch_cmd:nn #1#2
 {
-    % FIXED: Changed cN to cc to properly handle the constructed source name
-    \cs_set_eq:cc { #1 } { __bsk_text_#1_#2 }
+    % Definierar kommandot (t.ex. \bits) att expandera till texten + xspace
+    \cs_set:cpn { #1 } { \use:c { __bsk_text_#1_#2 } \xspace }
 }
 
 \cs_new_protected:Npn \__bsk_lang_switch_all:n #1
@@ -47,15 +54,7 @@
     }
 }
 
-\NewDocumentCommand{\setSectionLangToSwe}{}
-{
-    \__bsk_lang_switch_all:n {swe}
-}
-\NewDocumentCommand{\setSectionLangToEng}{}
-{
-    \__bsk_lang_switch_all:n {eng}
-}
+\NewDocumentCommand{\setSectionLangToSwe}{}{\__bsk_lang_switch_all:n {swe}}
+\NewDocumentCommand{\setSectionLangToEng}{}{\__bsk_lang_switch_all:n {eng}}
 
 \ExplSyntaxOff
-
-% --- Language Definitions ---
