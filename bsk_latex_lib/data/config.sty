@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/data/config}[2025/11/18 v1.4 Config Module]
+\ProvidesPackage{bsk_latex_lib/data/config}[2025/11/18 v0.1.0 Config Module]
 
 \ExplSyntaxOn
 
@@ -81,9 +81,9 @@
 		\nobreakspace FUM \nobreakspace \g_bsk_config_fum_tl
 	}
 }
-\languageDef{report}{Verksamhetsrapport}[Operational report]
-\languageDef{protocol}{Protokoll fört vid}[Protocol from]
-\languageDef{meet}{möte i}[meeting held at]
+\languageDef{report}{Verksamhetsrapport}[Operational~report]
+\languageDef{protocol}{Protokoll~fört~vid}[Protocol~from]
+\languageDef{meet}{möte~i}[meeting~held~at]
 % --- Header Title Logic ---
 \NewExpandableDocumentCommand{\bskDocumentTitle}{}
 {
@@ -92,8 +92,8 @@
 		{protokoll}
 			{\protocol\nobreakspace\g_bsk_config_sektion_tl{}\nobreakspace\meet\nobreakspace\g_bsk_config_plats_tl}
 
-			{verksamhetsrapport}
-			{\report\nobreakspace\g_bsk_config_sektion_tl\nobreakspace\bskVerksamhetsrapportSuffix}
+            {verksamhetsrapport}
+            {\report\nobreakspace\g_bsk_config_sektion_tl\bskVerksamhetsrapportSuffix}
 
 			{fristaende}
 			{

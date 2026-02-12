@@ -1,131 +1,131 @@
-%% Put this in main.tex and it will work
+%% put this in main.tex and it will work
 
 \documentclass{article}
 
-% Load your entire custom package library with one line.
+% load your entire custom package library with one line.
 \usepackage{bsk_latex_lib/bsk_latex_lib}
 
-% --- Document Configuration ---
-% All high-level settings for this specific document are placed here.
-\setupProtokoll{
+% --- document configuration ---
+% all high-level settings for this specific document are placed here.
+\setupprotokoll{
   sektion = {root},
-  plats   = {Karlskrona/Microsoft Teams},
+  plats   = {karlskrona/microsoft teams},
   datum   = {2025-mm-dd},
 }
 
-% --- Person Database ---
-% Define all relevant people and their roles.
-\newperson{\Ordfarande} { name = {Ordförande},    role = {Ordförande} }
-\newperson{\Person}  { name = {Namn Namnson},     role = {Vice-ordförande} }
-\newperson{\Namn} { name = {Namn Namnson},       role = {Sekreterare} }
-% \newperson{\Namn} { name = {Namn Namnson}, role = {Ekonomiansvarig} }
-% \newperson{\Namn} { name = {Namn Namnson},   role = {Ledamot} }
-% \newperson{\Namn}  { name = {Namn Namnson},   role = {Ledamot} }
-% \newperson{\Namn} { name = {Namn Namnson}, role = {Ledamot} }
-% \newperson{\Namn} { name = {Namn Namnson},    role = {Suppleant} }
-% \newperson{\Namn} { name = {Namn Namnson},   role = {Suppleant} }
+% --- person database ---
+% define all relevant people and their roles.
+\newperson{\ordfarande} { name = {ordförande},    role = {ordförande} }
+\newperson{\person}  { name = {namn namnson},     role = {vice-ordförande} }
+\newperson{\namn} { name = {namn namnson},       role = {sekreterare} }
+% \newperson{\namn} { name = {namn namnson}, role = {ekonomiansvarig} }
+% \newperson{\namn} { name = {namn namnson},   role = {ledamot} }
+% \newperson{\namn}  { name = {namn namnson},   role = {ledamot} }
+% \newperson{\namn} { name = {namn namnson}, role = {ledamot} }
+% \newperson{\namn} { name = {namn namnson},    role = {suppleant} }
+% \newperson{\namn} { name = {namn namnson},   role = {suppleant} }
 
 \begin{document}
 
-% --- Meeting-Specific Data ---
-% This is the only section that needs to be filled in for each new meeting.
+% --- meeting-specific data ---
+% this is the only section that needs to be filled in for each new meeting.
 
-% 1. Clear any data from previous meetings (good practice).
-\clearAttendance
+% 1. clear any data from previous meetings (good practice).
+\clearattendance
 
-% 2. Assign the officials for THIS meeting.
-\setMeetingOfficials{\Ordfarande}{\Person}{\Namn} % Chairperson, Secretary, Adjuster
+% 2. assign the officials for this meeting.
+\setmeetingofficials{\ordfarande}{\person}{\namn} % chairperson, secretary, adjuster
 
-% 3. Set the attendance for THIS meeting.
-\addPresent{\Ordfarande}
-\addPresent{\Person}
-\addPresent{\Namn}
+% 3. set the attendance for this meeting.
+\addpresent{\ordfarande}
+\addpresent{\person}
+\addpresent{\namn}
 
-% \addAbsent{\Namn}
-% \addAbsent{\Namn}
+% \addabsent{\namn}
+% \addabsent{\namn}
 
-% --- Automated Document Generation ---
+% --- automated document generation ---
 
-% This single command now generates the attendance lists and all
-\printFormalia
+% this single command now generates the attendance lists and all
+\printformalia
 
-% --- Meeting Content (Ärenden) ---
-% The unique content of the meeting is written here.
+% --- meeting content (ärenden) ---
+% the unique content of the meeting is written here.
 
-\paragraf{Skrivelser}{
-  Mail från xx angående yy \\
-  Mail från xx angående yy \\
+\paragraf{skrivelser}{
+  mail från xx angående yy \\
+  mail från xx angående yy \\
 }
 
-\paragraf{Rapporter}{
-  % UPDATED: Use \person{\Melker} to get the name
-  \person{\Ordfarande} har:
+\paragraf{rapporter}{
+  % updated: use \person{\melker} to get the name
+  \person{\ordfarande} har:
   \begin{itemize}
-    \item Inget att rapportera.
+    \item inget att rapportera.
   \end{itemize}
-  \person{\Namn} har:
+  \person{\namn} har:
   \begin{itemize}
-    \item Inget att rapportera.
+    \item inget att rapportera.
   \end{itemize}
 }
 
-\paragraf{Tidigare action-points}{}
+\paragraf{tidigare action-points}{}
 
-\paragraf{Studiebevakning}{
-  \textbf{Möte som vi kanske varit på}\\
-  Brödtext
+\paragraf{studiebevakning}{
+  \textbf{möte som vi kanske varit på}\\
+  brödtext
   \enter
 
-  \textbf{Annat möte eller punkt}\\
-  Brödtext
+  \textbf{annat möte eller punkt}\\
+  brödtext
 }
-\paragraf{Feedback-soffan}{
-  Inget att rapportera.
+\paragraf{feedback-soffan}{
+  inget att rapportera.
 }
 
-\paragraf{Studiesocialt}{
-  \textbf{Event}\\
-  Brödtext
+\paragraf{studiesocialt}{
+  \textbf{event}\\
+  brödtext
   \enter
 
-  \textbf{Annat event}\\
-  Brödtext
+  \textbf{annat event}\\
+  brödtext
 }
 
-\paragraf{Styrelsen}{}
-\paragraf{Vibe check}{}
+\paragraf{styrelsen}{}
+\paragraf{vibe check}{}
 
-% --- Closing Section ---
-% The \printClosing command handles the decision summary and signatures.
-% The paragraphs for Övrigt, Kalender, etc., are placed before it.
+% --- closing section ---
+% the \printclosing command handles the decision summary and signatures.
+% the paragraphs for övrigt, kalender, etc., are placed before it.
 
-\paragraf{Övrigt}{}
-\paragraf{Kalender}{
+\paragraf{övrigt}{}
+\paragraf{kalender}{
   \begin{tabular}{ll}
-  Nästa styrelse möte & yyyy-mm-dd\\
-  Event 1 & yyyy-mm-dd\\
-  Event 2 & yyyy-mm-dd\\
-  Möte 1 & yyyy-mm-dd\\
-  Möte 2 & yyyy-mm-dd\\
+  nästa styrelse möte & yyyy-mm-dd\\
+  event 1 & yyyy-mm-dd\\
+  event 2 & yyyy-mm-dd\\
+  möte 1 & yyyy-mm-dd\\
+  möte 2 & yyyy-mm-dd\\
   \end{tabular}
 }
 
-% §15 for Beslutssammanfattning is now generated automatically by \printClosing.
+% §15 for beslutssammanfattning is now generated automatically by \printclosing.
 
-\paragraf{Action points}{
-  \person{\Ordfarande} ska:
+\paragraf{action points}{
+  \person{\ordfarande} ska:
   \begin{itemize}
-    \item göra X
-    \item göra Y
+    \item göra x
+    \item göra y
   \end{itemize}
-  \person{\Namn} ska:
+  \person{\namn} ska:
   \begin{itemize}
-    \item Maila X
-    \item göra klart Y
+    \item maila x
+    \item göra klart y
   \end{itemize}
 }
 
 
-\printClosing
+\printclosing
 
 \end{document}

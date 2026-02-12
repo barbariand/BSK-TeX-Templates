@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.2 Formalia Module (Fix missing temp vars)]
+\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.4 Robust Formalia]
 
 \RequirePackage{xparse}
 \RequirePackage{booktabs}
@@ -13,12 +13,8 @@
 \tl_new:N   \l__bsk_person_name_tl
 \tl_new:N   \l__bsk_person_role_tl
 
-\tl_new:N   \l__bsk_temp_name_tl
-\tl_new:N   \l__bsk_temp_role_tl
-
 % --- Internal Logic ---
 
-% Internal function for \newperson
 \cs_new_protected:Npn \__bsk_formalia_new_person:nn #1#2
  {
   \prop_new:c {g_bsk_person_ \cs_to_str:N #1 _prop}
@@ -26,115 +22,68 @@
   \keys_set:nn { bsk/person } {#2}
   \prop_gput:cnV {g_bsk_person_ \cs_to_str:N #1 _prop} {name} \l__bsk_person_name_tl
   \prop_gput:cnV {g_bsk_person_ \cs_to_str:N #1 _prop} {role} \l__bsk_person_role_tl
+
+  % GÖR DETTA: Definierar kommandot (t.ex. \ordfarande) att skriva ut namnet direkt
+  \cs_gset:Npx #1 { \exp_not:V \l__bsk_person_name_tl }
  }
 
-% Internal function for \setMeetingOfficials
-\cs_new_protected:Npn \__bsk_formalia_set_officials:nnn #1#2#3
+\cs_new_protected:Npn \__bsk_formalia_set_officials:nnnn #1#2#3#4
  {
-  \prop_gput:Nnn \g_bsk_officials_prop {ordf_name}
-    { \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name} }
-  \prop_gput:Nnn \g_bsk_officials_prop {sekr_name}
-    { \prop_item:cn {g_bsk_person_ \cs_to_str:N #2 _prop} {name} }
-  \prop_gput:Nnn \g_bsk_officials_prop {just_name}
-    { \prop_item:cn {g_bsk_person_ \cs_to_str:N #3 _prop} {name} }
+  % Vi sparar det "uppackade" värdet (x) för att undvika expansion-fel senare
+  \prop_gput:Nnx \g_bsk_officials_prop {ordf_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name} }
+  \prop_gput:Nnx \g_bsk_officials_prop {sekr_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #2 _prop} {name} }
+  \prop_gput:Nnx \g_bsk_officials_prop {just1_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #3 _prop} {name} }
+
+  \quark_if_no_value:nTF {#4}
+    { \prop_gremove:Nn \g_bsk_officials_prop {just2_name} }
+    {
+      \prop_gput:Nnx \g_bsk_officials_prop {just2_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #4 _prop} {name} }
+    }
  }
 
-% Internal function for \person
-\cs_new:Npn \__bsk_formalia_get_person:n #1
- {
-  \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name}
- }
-
-% Internal function for \getOfficial
-\cs_new:Npn \__bsk_formalia_get_official:n #1
- {
-  \prop_item:Nn \g_bsk_officials_prop {#1}
- }
-
-% Internal function for attendance lists
 \cs_new_protected:Npn \__bsk_build_attendance_table:N #1
  {
   \begin{tabular}{ll}
    \seq_map_inline:Nn #1
     {
-     \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {name} \l__bsk_temp_name_tl
-     \prop_get:cnN {g_bsk_person_ \cs_to_str:N ##1 _prop} {role} \l__bsk_temp_role_tl
-     \l__bsk_temp_name_tl & \l__bsk_temp_role_tl \\
+     \prop_item:cn {g_bsk_person_ \cs_to_str:N ##1 _prop} {name} &
+     \prop_item:cn {g_bsk_person_ \cs_to_str:N ##1 _prop} {role} \\
     }
   \end{tabular}
  }
 
-% --- User Commands (Wrappers) ---
+% --- User Commands ---
 \keys_define:nn { bsk/person }
  {
   name .tl_set:N = \l__bsk_person_name_tl,
-  name .default:n = \c_novalue,
   role .tl_set:N = \l__bsk_person_role_tl,
  }
 
-\NewDocumentCommand{\newperson}{m m}
- {
-  \__bsk_formalia_new_person:nn {#1} {#2}
- }
+\NewDocumentCommand{\newperson}{m m} { \__bsk_formalia_new_person:nn {#1} {#2} }
 
-\NewDocumentCommand{\person}{m}
- {
-  \__bsk_formalia_get_person:n {#1}
- }
+\NewDocumentCommand{\setMeetingOfficials}{m m m o}
+ { \__bsk_formalia_set_officials:nnnn {#1} {#2} {#3} {#4} }
 
-\NewDocumentCommand{\setMeetingOfficials}{m m m}
- {
-  \__bsk_formalia_set_officials:nnn {#1} {#2} {#3}
- }
-
-\NewDocumentCommand{\addPresent}{m}
- {
-  \seq_gput_right:Nn \g_bsk_present_seq {#1}
- }
-\NewDocumentCommand{\addAbsent}{m}
- {
-  \seq_gput_right:Nn \g_bsk_absent_seq {#1}
- }
-\NewDocumentCommand{\clearAttendance}{}
- {
-  \prop_gclear:N \g_bsk_officials_prop
-  \seq_gclear:N \g_bsk_present_seq
-  \seq_gclear:N \g_bsk_absent_seq
- }
+\NewDocumentCommand{\addPresent}{m} { \seq_gput_right:Nn \g_bsk_present_seq {#1} }
+\NewDocumentCommand{\addAbsent}{m} { \seq_gput_right:Nn \g_bsk_absent_seq {#1} }
 
 \NewDocumentCommand{\present}{}
- {
-  \seq_if_empty:NF \g_bsk_present_seq
-   {
-    \paragraf{Närvarande:}{\__bsk_build_attendance_table:N \g_bsk_present_seq}
-   }
- }
-\NewDocumentCommand{\absent}{}
- {
-  \seq_if_empty:NF \g_bsk_absent_seq
-   {
-    \paragraf{Frånvarande:}{\__bsk_build_attendance_table:N \g_bsk_absent_seq}
-   }
- }
+ { \seq_if_empty:NF \g_bsk_present_seq { \paragraf{Närvarande:}{\__bsk_build_attendance_table:N \g_bsk_present_seq} } }
 
-\NewExpandableDocumentCommand{\getOfficial}{m}
- {
-  \__bsk_formalia_get_official:n {#1}
- }
+\NewDocumentCommand{\absent}{}
+ { \seq_if_empty:NF \g_bsk_absent_seq { \paragraf{Frånvarande:}{\__bsk_build_attendance_table:N \g_bsk_absent_seq} } }
+
+\NewExpandableDocumentCommand{\getOfficial}{m} { \prop_item:Nn \g_bsk_officials_prop {#1} }
 
 \NewDocumentCommand{\signatures}{ }
  {
   \begin{table}[H]
-  \noindent
   \begin{tabular*}{\linewidth}{l @{\extracolsep{\fill}} l}
-    \parbox[t]{2.5in}{\hrulefill \\ Mötesordförande \\ \getOfficial{ordf_name}} &
-    \parbox[t]{2.5in}{\hrulefill \\ Datum} \\
-    \addlinespace
-    \parbox[t]{2.5in}{\hrulefill \\ Mötessekreterare \\ \getOfficial{sekr_name}} &
-    \parbox[t]{2.5in}{\hrulefill \\ Datum} \\
-    \addlinespace
-    \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just_name}} &
-    \parbox[t]{2.5in}{\hrulefill \\ Datum}
+    \parbox[t]{2.5in}{\hrulefill \\ Mötesordförande \\ \getOfficial{ordf_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} \\ \addlinespace
+    \parbox[t]{2.5in}{\hrulefill \\ Mötessekreterare \\ \getOfficial{sekr_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} \\ \addlinespace
+    \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just1_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum}
+    \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
+     { \\ \addlinespace \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just2_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} }
   \end{tabular*}
   \end{table}
  }

@@ -1,96 +1,58 @@
-% bsk_latex_lib/bsk_meeting.sty
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/commands/meeting}[2025/09/27 v1.12 Meeting Module (Robust expl3)]
+\ProvidesPackage{bsk_latex_lib/commands/meeting}[2025/09/27 v1.13 Meeting Module]
 
 \RequirePackage{xparse}
 
 \ExplSyntaxOn
 
-% --- Internal Logic Functions ---
 \cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
 {
-\prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-\paragraf{Mötet~öppnas}{Mötesordförande~{\l_tmpa_tl}~förklarade~mötet~öppnat.}
+  \paragraf{Mötet~öppnas}{Mötesordförande~{\getOfficial{ordf_name}}~förklarade~mötet~öppnat.}
 }
 
 \cs_new_protected:Npn \__bsk_meeting_val_av_justerare:
 {
-\prop_get:NnN \g_bsk_officials_prop {ordf_name} \l_tmpa_tl
-\prop_get:NnN \g_bsk_officials_prop {sekr_name} \l_tmpb_tl
-\prop_get:NnN \g_bsk_officials_prop {just_name} \l_tmpc_tl
-\paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
-\Beslut*{
-att~välja~{\l_tmpa_tl}~till~mötesordförande.,
-att~välja~{\l_tmpb_tl}~till~mötessekreterare.,
-att~välja~{\l_tmpc_tl}~till~justeringsperson.
-}
-}
+  \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
+    \YrkandeBeslut*{
+      att~välja~{\getOfficial{ordf_name}}~till~mötesordförande.,
+      att~välja~{\getOfficial{sekr_name}}~till~mötessekreterare.,
+      att~välja~{\getOfficial{just1_name}}~till~justeringsperson.
+    }
+    \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
+    {
+      \Beslut*{ att~välja~{\getOfficial{just2_name}}~till~justeringsperson. }
+    }
+  }
 }
 
+% --- Samma som tidigare för övriga funktioner ---
 \cs_new_protected:Npn \__bsk_meeting_moetets_behoriga_utlysande:
-{
-	\paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}
-	{
-		\Beslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}
-	}
-}
+{ \paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}{
+  \YrkandeBeslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}}}
 
 \cs_new_protected:Npn \__bsk_meeting_yttrande_och_rostratt:
-{
-	\paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}
-}
+{ \paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.} }
 
 \cs_new_protected:Npn \__bsk_meeting_faststallande_av_foredragningslista:
-{
-	\paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.}
-}
+{ \paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.} }
 
 \cs_new_protected:Npn \__bsk_meeting_faststallande_av_foregaende_protokoll:
-{
-	\paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.}
-}
-
-% --- User Commands (Wrappers) ---
-\NewDocumentCommand{\moetetsOppnande}{}
-{
-	\__bsk_meeting_moetets_oppnande:
-}
-\NewDocumentCommand{\valAvJusterare}{}
-{
-	\__bsk_meeting_val_av_justerare:
-}
-\NewDocumentCommand{\moetetsBehorigaUtlysande}{}
-{
-	\__bsk_meeting_moetets_behoriga_utlysande:
-}
-\NewDocumentCommand{\yttrandeOchRostratt}{}
-{
-	\__bsk_meeting_yttrande_och_rostratt:
-}
-\NewDocumentCommand{\faststallandeAvForedragningslista}{O{}}
-{
-	\__bsk_meeting_faststallande_av_foredragningslista:
-}
-\NewDocumentCommand{\faststallandeAvForegaendeProtokoll}{O{}}
-{
-	\__bsk_meeting_faststallande_av_foregaende_protokoll:
-}
+{ \paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.} }
 
 \NewDocumentCommand{\printFormalia}{}
 {
-	\present
-	\absent
+	\present \absent
 	\subsection*{Formalia}
-	\moetetsOppnande
-	\valAvJusterare
-	\moetetsBehorigaUtlysande
-	\yttrandeOchRostratt
-	\faststallandeAvForedragningslista
-	\faststallandeAvForegaendeProtokoll
+	\__bsk_meeting_moetets_oppnande:
+	\__bsk_meeting_val_av_justerare:
+	\__bsk_meeting_moetets_behoriga_utlysande:
+	\__bsk_meeting_yttrande_och_rostratt:
+	\__bsk_meeting_faststallande_av_foredragningslista:
+	\__bsk_meeting_faststallande_av_foregaende_protokoll:
 	\section*{Ärenden}
 }
 
-\DeclareDocumentCommand{\printClosing}{}
+\NewDocumentCommand{\printClosing}{}
 {
 	\paragraf{Mötet avslutas}{\getOfficial{ordf_name}~avslutade~mötet~kl.~hh:mm.}
 	\section*{Avslutning}
