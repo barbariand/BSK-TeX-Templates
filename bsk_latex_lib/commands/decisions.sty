@@ -30,14 +30,15 @@
 \NewDocumentCommand{\YrkandeBeslut}{ s O{,} m m m }
 {
   \group_begin:
-  % Dela upp listorna baserat på vald separerare (#2)
   \seq_set_split:Nnn \l_bsk_clauses_seq { #2 } { #4 }
   \seq_set_split:Nnn \l_bsk_outcomes_seq { #2 } { #5 }
 
   \int_zero:N \l_bsk_clause_int
 
-  % 1. Skriv ALLTID ut i protokollet (där kommandot körs)
-  #3~yrkar~på~
+  % Resolve name for printing
+  \tl_set:Nx \l_tmpa_tl { \prop_item:cn {g_bsk_person_ #3 _prop} {name} }
+
+  \tl_use:N \l_tmpa_tl~yrkar~på~
   \seq_map_inline:Nn \l_bsk_clauses_seq
   {
     \int_incr:N \l_bsk_clause_int
@@ -54,16 +55,15 @@
     }
   \end{itemize}
 
-  % 2. Registrera i sammanfattningen BARA om ingen stjärna (*) finns
   \IfBooleanF {#1}
   {
     \seq_gput_right:Nx \g_bsk_complex_decisions_seq
     {
       { \int_use:N \c@paragrafcounter }
-      { #3 }
-      { #4 }
-      { #5 }
-      { #2 }
+      { \exp_not:V \l_tmpa_tl }
+      { \exp_not:n {#4} }
+      { \exp_not:n {#5} }
+      { \exp_not:n {#2} }
     }
   }
   \group_end:
@@ -111,4 +111,8 @@
   }
 }
 
+\cs_new_protected:Npn \__bsk_clear_decisions: {
+    \seq_gclear:N \g_bsk_complex_decisions_seq
+}
+\NewDocumentCommand{\clearDecisions}{}{\__bsk_clear_decisions:}
 \ExplSyntaxOff

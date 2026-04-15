@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.4 Robust Formalia]
+\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.5 Robust Formalia]
 
 \RequirePackage{xparse}
 \RequirePackage{booktabs}
@@ -23,21 +23,20 @@
   \prop_gput:cnV {g_bsk_person_ \cs_to_str:N #1 _prop} {name} \l__bsk_person_name_tl
   \prop_gput:cnV {g_bsk_person_ \cs_to_str:N #1 _prop} {role} \l__bsk_person_role_tl
 
-  % GÖR DETTA: Definierar kommandot (t.ex. \ordfarande) att skriva ut namnet direkt
-  \cs_gset:Npx #1 { \exp_not:V \l__bsk_person_name_tl }
+  % Define the command to expand to its internal ID for lookup
+  \cs_gset:Npn #1 { \cs_to_str:N #1 }
  }
 
 \cs_new_protected:Npn \__bsk_formalia_set_officials:nnnn #1#2#3#4
  {
-  % Vi sparar det "uppackade" värdet (x) för att undvika expansion-fel senare
-  \prop_gput:Nnx \g_bsk_officials_prop {ordf_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #1 _prop} {name} }
-  \prop_gput:Nnx \g_bsk_officials_prop {sekr_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #2 _prop} {name} }
-  \prop_gput:Nnx \g_bsk_officials_prop {just1_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #3 _prop} {name} }
+  \prop_gput:Nnx \g_bsk_officials_prop {ordf_name} { \prop_item:cn {g_bsk_person_ #1 _prop} {name} }
+  \prop_gput:Nnx \g_bsk_officials_prop {sekr_name} { \prop_item:cn {g_bsk_person_ #2 _prop} {name} }
+  \prop_gput:Nnx \g_bsk_officials_prop {just1_name} { \prop_item:cn {g_bsk_person_ #3 _prop} {name} }
 
   \quark_if_no_value:nTF {#4}
     { \prop_gremove:Nn \g_bsk_officials_prop {just2_name} }
     {
-      \prop_gput:Nnx \g_bsk_officials_prop {just2_name} { \prop_item:cn {g_bsk_person_ \cs_to_str:N #4 _prop} {name} }
+      \prop_gput:Nnx \g_bsk_officials_prop {just2_name} { \prop_item:cn {g_bsk_person_ #4 _prop} {name} }
     }
  }
 
@@ -46,8 +45,8 @@
   \begin{tabular}{ll}
    \seq_map_inline:Nn #1
     {
-     \prop_item:cn {g_bsk_person_ \cs_to_str:N ##1 _prop} {name} &
-     \prop_item:cn {g_bsk_person_ \cs_to_str:N ##1 _prop} {role} \\
+     \prop_item:cn {g_bsk_person_ ##1 _prop} {name} &
+     \prop_item:cn {g_bsk_person_ ##1 _prop} {role} \\
     }
   \end{tabular}
  }
@@ -75,6 +74,12 @@
 
 \NewExpandableDocumentCommand{\getOfficial}{m} { \prop_item:Nn \g_bsk_officials_prop {#1} }
 
+\NewDocumentCommand{\printFormalia}{}
+ {
+  \present
+  \absent
+ }
+
 \NewDocumentCommand{\signatures}{ }
  {
   \begin{table}[H]
@@ -87,5 +92,12 @@
   \end{tabular*}
   \end{table}
  }
+
+% Internal cleanup helper
+\cs_new_protected:Npn \__bsk_clear_attendance: {
+    \seq_gclear:N \g_bsk_present_seq
+    \seq_gclear:N \g_bsk_absent_seq
+}
+\NewDocumentCommand{\clearAttendance}{}{\__bsk_clear_attendance:}
 
 \ExplSyntaxOff

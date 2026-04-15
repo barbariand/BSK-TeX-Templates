@@ -11,10 +11,22 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {inherit system;};
+      tex = pkgs.texlive.combine {
+        inherit
+          (pkgs.texlive)
+          scheme-basic
+          dvisvgm
+          wrapfig
+          amsmath
+          ulem
+          hyperref
+          capt-of
+          ;
+      };
     in {
       devShells.default = with pkgs;
         mkShell {
-          packages = with pkgs; [tree-sitter texliveFull tex-fmt];
+          packages = with pkgs; [pandoc tree-sitter tex tex-fmt];
           shellHook = ''
           '';
         };

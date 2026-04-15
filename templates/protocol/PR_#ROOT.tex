@@ -1,4 +1,4 @@
-%% put this in main.tex and it will work
+% put this in main.tex and it will work
 
 \documentclass{article}
 
@@ -7,7 +7,7 @@
 
 % --- document configuration ---
 % all high-level settings for this specific document are placed here.
-\setupprotokoll{
+\setupProtokoll{
   sektion = {root},
   plats   = {karlskrona/microsoft teams},
   datum   = {2025-mm-dd},
@@ -16,7 +16,7 @@
 % --- person database ---
 % define all relevant people and their roles.
 \newperson{\ordfarande} { name = {ordförande},    role = {ordförande} }
-\newperson{\person}  { name = {namn namnson},     role = {vice-ordförande} }
+\newperson{\cindy}  { name = {namn namnson},     role = {vice-ordförande} }
 \newperson{\namn} { name = {namn namnson},       role = {sekreterare} }
 % \newperson{\namn} { name = {namn namnson}, role = {ekonomiansvarig} }
 % \newperson{\namn} { name = {namn namnson},   role = {ledamot} }
@@ -26,28 +26,16 @@
 % \newperson{\namn} { name = {namn namnson},   role = {suppleant} }
 
 \begin{document}
-
-% --- meeting-specific data ---
-% this is the only section that needs to be filled in for each new meeting.
-
-% 1. clear any data from previous meetings (good practice).
-\clearattendance
-
 % 2. assign the officials for this meeting.
-\setmeetingofficials{\ordfarande}{\person}{\namn} % chairperson, secretary, adjuster
+\setMeetingOfficials{\ordfarande}{\cindy}{\namn} % chairperson, secretary, adjuster
 
 % 3. set the attendance for this meeting.
-\addpresent{\ordfarande}
-\addpresent{\person}
-\addpresent{\namn}
-
-% \addabsent{\namn}
-% \addabsent{\namn}
-
-% --- automated document generation ---
+\addPresent{\ordfarande}
+\addPresent{\cindy}
+\addPresent{\namn}
 
 % this single command now generates the attendance lists and all
-\printformalia
+\printFormalia
 
 % --- meeting content (ärenden) ---
 % the unique content of the meeting is written here.
@@ -58,12 +46,11 @@
 }
 
 \paragraf{rapporter}{
-  % updated: use \person{\melker} to get the name
-  \person{\ordfarande} har:
+  \ordfarande har:
   \begin{itemize}
     \item inget att rapportera.
   \end{itemize}
-  \person{\namn} har:
+  \namn har:
   \begin{itemize}
     \item inget att rapportera.
   \end{itemize}
@@ -74,7 +61,6 @@
 \paragraf{studiebevakning}{
   \textbf{möte som vi kanske varit på}\\
   brödtext
-  \enter
 
   \textbf{annat möte eller punkt}\\
   brödtext
@@ -83,14 +69,14 @@
   inget att rapportera.
 }
 
-\paragraf{studiesocialt}{
-  \textbf{event}\\
-  brödtext
-  \enter
+\paragraf{Mötets beslutspunkt}{
+    % Ett yrkande med en sats
+    \YrkandeBeslut{\cindy}{Ha ordinarieårsmötet 17:15 29/1}{bifall}
 
-  \textbf{annat event}\\
-  brödtext
-}
+
+    % Ett yrkande med flera satser och olika utfall
+    \YrkandeBeslut{\cindy}{Köpa in kaffe, Köpa in en rymdraket}{bifall, avslag}
+  }
 
 \paragraf{styrelsen}{}
 \paragraf{vibe check}{}
@@ -110,22 +96,20 @@
   \end{tabular}
 }
 
-% §15 for beslutssammanfattning is now generated automatically by \printclosing.
 
 \paragraf{action points}{
-  \person{\ordfarande} ska:
+  \ordfarande ska:
   \begin{itemize}
     \item göra x
     \item göra y
   \end{itemize}
-  \person{\namn} ska:
+  \namn ska:
   \begin{itemize}
     \item maila x
     \item göra klart y
   \end{itemize}
 }
 
-
-\printclosing
+\printClosing
 
 \end{document}
