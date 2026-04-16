@@ -14,13 +14,28 @@
       tex = pkgs.texlive.combine {
         inherit
           (pkgs.texlive)
+          babel
+          babel-swedish
+          float
+          times
+          tex-gyre
+          everypage
+          enumitem
+          pgf
+          xkeyval
+          background
+          booktabs
+          fancyhdr
           scheme-basic
           dvisvgm
+          xcolor
           wrapfig
+          zref
           amsmath
           ulem
           hyperref
           capt-of
+          latexmk
           ;
       };
     in {
