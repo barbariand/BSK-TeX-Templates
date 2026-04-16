@@ -18,7 +18,6 @@
 
 \RequirePackage[lastpage,user]{zref}
 \RequirePackage{fancyhdr}
-\RequirePackage{background}
 \RequirePackage{tikz}
 \usetikzlibrary{calc}
 
@@ -34,15 +33,11 @@
 
 % --- Ram ---
 \newcommand{\SetPageBorder}{
-  \backgroundsetup{
-    color=black,scale=1,opacity=1,angle=0,
-    contents={\tikz[remember picture, overlay]\draw[line width=3pt,draw=\meetingFarg]
-    % Line on bottom
+  \AddToHook{shipout/background}{
+    \tikz[remember picture, overlay]\draw[line width=3pt,draw=\meetingFarg]
       ( $ (current page.south east) +(-12.5, 2.0) $ ) -- ( $ (current page.south west) +(1.75 , 2.0) $ )
-      % Line on left side
       ( $ (current page.south west) +(2, 1.75) $ ) -- ( $ (current page.north west) +(2, -1.75) $ )
-      % Line on top
-      ( $ (current page.north west) +(1.75, -2) $ ) -- ( $ (current page.north east) -(2, 2) $ ); }
+      ( $ (current page.north west) +(1.75, -2) $ ) -- ( $ (current page.north east) -(2, 2) $ );
   }
 }
 

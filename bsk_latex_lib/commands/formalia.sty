@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.5 Robust Formalia]
+\ProvidesPackage{bsk_latex_lib/commands/formalia}[2025/09/27 v11.6 Robust Formalia]
 
 \RequirePackage{xparse}
 \RequirePackage{booktabs}
@@ -12,6 +12,7 @@
 \seq_new:N  \g_bsk_absent_seq
 \tl_new:N   \l__bsk_person_name_tl
 \tl_new:N   \l__bsk_person_role_tl
+\tl_new:N   \l__bsk_attendance_body_tl % Added to safely construct the tabular rows
 
 % --- Internal Logic ---
 
@@ -33,7 +34,8 @@
   \prop_gput:Nnx \g_bsk_officials_prop {sekr_name} { \prop_item:cn {g_bsk_person_ #2 _prop} {name} }
   \prop_gput:Nnx \g_bsk_officials_prop {just1_name} { \prop_item:cn {g_bsk_person_ #3 _prop} {name} }
 
-  \quark_if_no_value:nTF {#4}
+  % tl_if_novalue:nTF reliably captures the xparse [o] empty state
+  \tl_if_novalue:nTF {#4} 
     { \prop_gremove:Nn \g_bsk_officials_prop {just2_name} }
     {
       \prop_gput:Nnx \g_bsk_officials_prop {just2_name} { \prop_item:cn {g_bsk_person_ #4 _prop} {name} }
@@ -42,13 +44,24 @@
 
 \cs_new_protected:Npn \__bsk_build_attendance_table:N #1
  {
-  \begin{tabular}{ll}
-   \seq_map_inline:Nn #1
-    {
-     \prop_item:cn {g_bsk_person_ ##1 _prop} {name} &
-     \prop_item:cn {g_bsk_person_ ##1 _prop} {role} \\
-    }
+  \tl_clear:N \l__bsk_attendance_body_tl
+  \seq_map_inline:Nn #1
+   {
+    \__bsk_append_attendance_row:nn ##1
+   }
+  \begin{tabular}{lll}
+   \l__bsk_attendance_body_tl
   \end{tabular}
+ }
+
+\cs_new_protected:Npn \__bsk_append_attendance_row:nn #1#2
+ {
+  \tl_put_right:Nn \l__bsk_attendance_body_tl
+   {
+    \prop_item:cn {g_bsk_person_ #1 _prop} {name} &
+    \prop_item:cn {g_bsk_person_ #1 _prop} {role} &
+    \tl_if_empty:nF {#2} { \textit{#2} } \\ 
+   }
  }
 
 % --- User Commands ---
@@ -63,8 +76,10 @@
 \NewDocumentCommand{\setMeetingOfficials}{m m m o}
  { \__bsk_formalia_set_officials:nnnn {#1} {#2} {#3} {#4} }
 
-\NewDocumentCommand{\addPresent}{m} { \seq_gput_right:Nn \g_bsk_present_seq {#1} }
-\NewDocumentCommand{\addAbsent}{m} { \seq_gput_right:Nn \g_bsk_absent_seq {#1} }
+\NewDocumentCommand{\addPresent}{ O{} m }
+ { \seq_gput_right:Nn \g_bsk_present_seq { {#2} {#1} } }
+\NewDocumentCommand{\addAbsent}{ m }
+ { \seq_gput_right:Nn \g_bsk_absent_seq { {#1} {} } }
 
 \NewDocumentCommand{\present}{}
  { \seq_if_empty:NF \g_bsk_present_seq { \paragraf{Närvarande:}{\__bsk_build_attendance_table:N \g_bsk_present_seq} } }
@@ -74,16 +89,20 @@
 
 \NewExpandableDocumentCommand{\getOfficial}{m} { \prop_item:Nn \g_bsk_officials_prop {#1} }
 
-
 \NewDocumentCommand{\signatures}{ }
  {
+  \tl_clear:N \l_tmpa_tl
+  \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
+   {
+    \tl_put_right:Nn \l_tmpa_tl
+     { \\ \addlinespace \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just2_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} }
+   }
   \begin{table}[H]
   \begin{tabular*}{\linewidth}{l @{\extracolsep{\fill}} l}
     \parbox[t]{2.5in}{\hrulefill \\ Mötesordförande \\ \getOfficial{ordf_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} \\ \addlinespace
     \parbox[t]{2.5in}{\hrulefill \\ Mötessekreterare \\ \getOfficial{sekr_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} \\ \addlinespace
     \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just1_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum}
-    \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
-     { \\ \addlinespace \parbox[t]{2.5in}{\hrulefill \\ Justerare \\ \getOfficial{just2_name}} & \parbox[t]{2.5in}{\hrulefill \\ Datum} }
+    \l_tmpa_tl
   \end{tabular*}
   \end{table}
  }

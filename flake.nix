@@ -16,14 +16,13 @@
           (pkgs.texlive)
           babel
           babel-swedish
+          hyphen-swedish
           float
           times
           tex-gyre
-          everypage
           enumitem
           pgf
           xkeyval
-          background
           booktabs
           fancyhdr
           scheme-basic
@@ -41,7 +40,7 @@
     in {
       devShells.default = with pkgs;
         mkShell {
-          packages = with pkgs; [pandoc tree-sitter tex tex-fmt];
+          packages = with pkgs; [pandoc watchexec tree-sitter tex tex-fmt];
           shellHook = ''
           '';
         };

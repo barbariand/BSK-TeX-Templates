@@ -1,6 +1,5 @@
 out/
 main.tex
 .direnv/
-latex.log
-test.txt
 .envrc
+latex_log.txt

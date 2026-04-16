@@ -5,57 +5,57 @@
 
 \ExplSyntaxOn
 
-\cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:
+\cs_new_protected:Npn \__bsk_meeting_moetets_oppnande:n #1
 {
-  \paragraf{Mötet~öppnas}{Mötesordförande~{\getOfficial{ordf_name}}~förklarade~mötet~öppnat.}
+  \paragraf{Mötet~öppnas}{Mötet~öppnades~av~{\getOfficial{ordf_name}}~kl.~#1.}
 }
 
 \cs_new_protected:Npn \__bsk_meeting_val_av_justerare:
 {
-  \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
-    \YrkandeBeslut*{
-      att~välja~{\getOfficial{ordf_name}}~till~mötesordförande.,
-      att~välja~{\getOfficial{sekr_name}}~till~mötessekreterare.,
-      att~välja~{\getOfficial{just1_name}}~till~justeringsperson.
-    }
-    \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
-    {
-      \Beslut*{ att~välja~{\getOfficial{just2_name}}~till~justeringsperson. }
-    }
-  }
+  \paragraf{Val~av~mötesordförande,~mötessekreterare~samt~justeringsperson.}{
+    \YrkandeBeslut*{
+      att~välja~{\getOfficial{ordf_name}}~till~mötesordförande.,
+      att~välja~{\getOfficial{sekr_name}}~till~mötessekreterare.,
+      att~välja~{\getOfficial{just1_name}}~till~justeringsperson.
+    }
+    \prop_if_in:NnT \g_bsk_officials_prop {just2_name}
+    {
+      \Beslut*{ att~välja~{\getOfficial{just2_name}}~till~justeringsperson. }
+    }
+  }
 }
 
 \cs_new_protected:Npn \__bsk_meeting_moetets_behoriga_utlysande:
 { \paragraf{Fråga~om~mötets~behöriga~utlysande~och~beslutsmässighet}{
-  \YrkandeBeslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}}}
+  \YrkandeBeslut*{anse~mötet~behörigt~utlyst.}{anse~mötet~vara~beslutsmässigt~med~minst~hälften~av~ordinarie~ledamöter~närvarande.}}}
 
 \cs_new_protected:Npn \__bsk_meeting_yttrande_och_rostratt:
-{ \paragraf{Yttranderätt~och~rösträtt}{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.} }
+{ \paragraf{Yttranderätt~och~rösträtt}{\Beslut*{Samtliga~närvarande~medlemmar~i~Blekinge~studentkår~hade~närvaro-~samt~yttranderätt.~Ordinarie~styrelse~hade~rösträtt~vid~beslut.}} }
 
-\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foredragningslista:
-{ \paragraf{Fastställande~av~dagordning}{Dagordningen~fastställdes~enligt~utsänt~förslag.} }
+\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foredragningslista:n #1
+{ \paragraf{Fastställande~av~dagordning}{#1} }
 
-\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foregaende_protokoll:
-{ \paragraf{Fastställande~av~föregående~mötesprotokoll}{Föregående~mötesprotokoll~lades~till~handlingarna.} }
+\cs_new_protected:Npn \__bsk_meeting_faststallande_av_foregaende_protokoll:n #1
+{ \paragraf{Fastställande~av~föregående~mötesprotokoll}{#1} }
 
-\NewDocumentCommand{\printFormalia}{}
+\NewDocumentCommand{\printFormalia}{ m O{Dagordningen~fastställdes~enligt~utsänt~förslag.} O{{\getOfficial{ordf_name}}~yrkar~på~att(1)\\~\textit{"fastställa~föregående~mötesprotokoll"}\vspace{0.5\baselineskip}\\~\Beslut*{bifalla~yrkandet}} }
 {
-	\present \absent
-	\subsection*{Formalia}
-	\__bsk_meeting_moetets_oppnande:
-	\__bsk_meeting_val_av_justerare:
-	\__bsk_meeting_moetets_behoriga_utlysande:
-	\__bsk_meeting_yttrande_och_rostratt:
-	\__bsk_meeting_faststallande_av_foredragningslista:
-	\__bsk_meeting_faststallande_av_foregaende_protokoll:
-	\section*{Ärenden}
+    \present \absent
+    \subsection*{Formalia}
+    \__bsk_meeting_moetets_oppnande:n { #1 }
+    \__bsk_meeting_val_av_justerare:
+    \__bsk_meeting_moetets_behoriga_utlysande:
+    \__bsk_meeting_yttrande_och_rostratt:
+    \__bsk_meeting_faststallande_av_foredragningslista:n { #2 }
+    \__bsk_meeting_faststallande_av_foregaende_protokoll:n { #3 }
+    \section*{Ärenden}
 }
 
 \NewDocumentCommand{\printClosing}{}
 {
-	\paragraf{Mötet avslutas}{\getOfficial{ordf_name}~avslutade~mötet~kl.~hh:mm.}
-	\section*{Avslutning}
-	\printDecisionSummary
-	\signatures
+    \paragraf{Mötet avslutas}{\getOfficial{ordf_name}~avslutade~mötet~kl.~hh:mm.}
+    \section*{Avslutning}
+    \printDecisionSummary
+    \signatures
 }
 \ExplSyntaxOff

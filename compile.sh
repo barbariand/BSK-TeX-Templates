@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-# Skapa kataloger om de inte finns
 mkdir -p ./out/pdf ./out/aux
 
-# Rensa gamla filer
 rm -f ./out/pdf/*
 rm -f ./out/aux/*
 rm -f ./latex_log.txt
 
-# Kör latexmk
-# Vi använder -e för att sätta interna Perl-variabler som saknar egna flaggor
-latexmk -pdf -f \
+latexmk -pdf -quiet\
   -interaction=nonstopmode \
   -recorder \
   -bibtex- \
@@ -19,7 +15,6 @@ latexmk -pdf -f \
   -outdir=./out/pdf \
   main.tex
 
-# Kopiera loggfilen för enklare inspektion
 if [ -f "./out/aux/main.log" ]; then
     cp ./out/aux/main.log ./latex_log.txt
 fi
